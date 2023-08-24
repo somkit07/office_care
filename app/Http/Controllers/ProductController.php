@@ -27,9 +27,19 @@ class ProductController extends Controller implements HasImagesContract
     public function category1ServerProcessing() {
         $query = DB::table('category1')
             ->orderBy('category1.category1_id', 'asc');
-        
         return \DataTables::of($query)
+            ->addColumn('category1_name', function($r) {
+                $query_count = DB::table('category1')
+                ->join('category2', 'category1.category1_id', '=', 'category2.category1_id')
+                ->join('category3', 'category2.category2_id', '=', 'category3.category2_id')
+                ->join('product', 'category3.category3_id', '=', 'product.category3_id')
+                ->where('category1.category1_id', $r->category1_id)
+                ->orderBy('category1.category1_id', 'asc')
+                ->count();
+                return $r->category1_name.' ('.number_format($query_count, 0, '.', ',').')';
+            })
             ->addColumn('action', function($r) {
+                
                 return '<a href="'.url("backend/category1/category1_add_edit/".$r->category1_id).'">Edit</a> / <a href="'.url("backend/category1/category1_delete/".$r->category1_id).'" onclick="return confirm(\'Confirm Delete\')">Delete</a>';
             })
             ->rawColumns(['action'])->make(true);
@@ -98,18 +108,30 @@ class ProductController extends Controller implements HasImagesContract
 
     public function category2ServerProcessing() {
         $query = DB::table('category2')
-            ->select('category2_id', 'category2_image', 'category1_name', 'category2_name', 'category2_max_price')
+            ->select('category2_id', 'category2_image', 'category2_image2', 'category1_name', 'category2_name', 'category2_max_price')
             ->join('category1', 'category1.category1_id', '=', 'category2.category1_id')
             ->orderBy('category2.category2_id', 'asc');
         
         return \DataTables::of($query)
+            ->addColumn('category2_name', function($r) {
+                $query_count = DB::table('category2')
+                ->join('category3', 'category2.category2_id', '=', 'category3.category2_id')
+                ->join('product', 'category3.category3_id', '=', 'product.category3_id')
+                ->where('category2.category2_id', $r->category2_id)
+                ->orderBy('category2.category2_id', 'asc')
+                ->count();
+                return $r->category2_name.' ('.number_format($query_count, 0, '.', ',').')';
+            })
             ->addColumn('category2_image', function($r) {
                 return '<img src="'.asset("public/uploads/category2/".$r->category2_image).'" width="150">';
+            })
+            ->addColumn('category2_image2', function($r) {
+                return '<img src="'.asset("public/uploads/category2/".$r->category2_image2).'" width="150">';
             })
             ->addColumn('action', function($r) {
                 return '<a href="'.url("backend/category2/category2_add_edit/".$r->category2_id).'">Edit</a> / <a href="'.url("backend/category2/category2_delete/".$r->category2_id).'" onclick="return confirm(\'Confirm Delete\')">Delete</a>';
             })
-            ->rawColumns(['category2_image', 'action'])->make(true);
+            ->rawColumns(['category2_image', 'category2_image2', 'action'])->make(true);
     }
 
     public function category2AddEdit(Request $request, $id = '') {
@@ -137,16 +159,32 @@ class ProductController extends Controller implements HasImagesContract
             'category2_datetime_update' => date('Y-m-d H:i:s')
         );
 
+        $i = 1;
+
         if($request->hasFile('category2_image')) {
 
             $image = $request->file('category2_image');
-            $filename = date('YmdHis').'.'.$image->getClientOriginalExtension();
+            $filename = date('YmdHis').$i.'.'.$image->getClientOriginalExtension();
         
             $image_resize = Image::make($image->getRealPath());              
             $image_resize->resize(333, 333);
             $image_resize->save(public_path('uploads/category2/'.$filename));
 
             $data['category2_image'] = $filename;
+        }
+
+        $i++;
+
+        if($request->hasFile('category2_image2')) {
+
+            $image = $request->file('category2_image2');
+            $filename = date('YmdHis').$i.'.'.$image->getClientOriginalExtension();
+        
+            $image_resize = Image::make($image->getRealPath());              
+            // $image_resize->resize(333, 333);
+            $image_resize->save(public_path('uploads/category2/'.$filename));
+
+            $data['category2_image2'] = $filename;
         }
 
         if($request->input('category2_id') != '') {
@@ -188,6 +226,14 @@ class ProductController extends Controller implements HasImagesContract
                 } else {
                     return '';
                 }
+            })
+            ->addColumn('category3_name', function($r) {
+                $query_count = DB::table('category3')
+                ->join('product', 'category3.category3_id', '=', 'product.category3_id')
+                ->where('category3.category3_id', $r->category3_id)
+                ->orderBy('category3.category3_id', 'asc')
+                ->count();
+                return $r->category3_name.' ('.number_format($query_count, 0, '.', ',').')';
             })
             ->addColumn('action', function($r) {
                 return '<a href="'.url("backend/category3/category3_add_edit/".$r->category3_id).'">Edit</a> / <a href="'.url("backend/category3/category3_delete/".$r->category3_id).'" onclick="return confirm(\'Confirm Delete\')">Delete</a>';
@@ -569,7 +615,7 @@ class ProductController extends Controller implements HasImagesContract
             'product_price' => $request->input('product_price'),
             'brand_id' => $request->input('brand_id'),
             'product_detail' => $request->input('product_detail'),
-            'product_specificial' => $request->input('product_specificial'),
+            //'product_specificial' => $request->input('product_specificial'),
             'product_code' => $request->input('product_code'),
             'product_sort' => $request->input('product_sort'),
             'product_datetime_update' => date('Y-m-d H:i:s')

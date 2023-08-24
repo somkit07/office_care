@@ -117,8 +117,8 @@ class FeatureController extends Controller
 
     public function featureSections_delete(Request $request, $id)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $feature_selection = DB::table('feature_selections')
                 ->where('id', $id)
                 ->update([
@@ -127,19 +127,20 @@ class FeatureController extends Controller
                     'updated_at' => date("Y-m-d H:i:s")
                 ]);
 
-            DB::commit();
+        //     DB::commit();
             $status = 200;
             $message = "Success";
-        } catch (\Exception $e) {
-            $status = 500;
-            $message = "Error";
-            DB::rollback();
-        }
+        // } catch (\Exception $e) {
+        //     $status = 500;
+        //     $message = "Error";
+        //     DB::rollback();
+        // }
 
         return response()->json([
             'status' => $status,
             'message' => $message,
         ]);
+
     }
 
     public function featureServerProcessing($id) 
@@ -222,8 +223,8 @@ class FeatureController extends Controller
 
     public function feature_delete(Request $request, $id)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $feature_selection = DB::table('features')
                 ->where('id', $id)
                 ->update([
@@ -231,20 +232,24 @@ class FeatureController extends Controller
                     'updated_by' => $request->session()->has('user_id'),
                     'updated_at' => date("Y-m-d H:i:s")
                 ]);
-
-            DB::commit();
+            // DB::commit();
             $status = 200;
             $message = "Success";
-        } catch (\Exception $e) {
-            $status = 500;
-            $message = "Error";
-            DB::rollback();
-        }
+        // // } catch (\Exception $e) {
+        // //     $status = 500;
+        // //     $message = "Error";
+        // //     DB::rollback();
+        // // }
 
         return response()->json([
             'status' => $status,
             'message' => $message,
         ]);
+    }
+
+    public function feature_test()
+    {
+        return view('backend/feature/test');
     }
 
 }

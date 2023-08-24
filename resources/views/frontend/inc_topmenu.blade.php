@@ -4,7 +4,9 @@
     $sub_total_inc = 0;
     foreach (ShoppingCart::all() as $r_inc) {
         $qty_inc += $r_inc->qty;
+    
         $price_inc = $r_inc->price * $r_inc->qty;
+    
         $sub_total_inc += $price_inc;
     }
     
@@ -25,79 +27,78 @@
 
         <div class="d-none d-sm-none d-md-none d-lg-block d-xl-block">
             <div class="container-fluid">
-                <div class="wrapper_pad">
-                    <div class="menugroup">
-                        <div class="row mt-3">
-                            <div class="col-lg-3">
-                                <div class="mainlogo">
-                                    <a href="{{ url('index') }}">
-                                        <img src="{{ asset('public/frontend/images/mainlogo.svg') }}" alt="">
-                                    </a>
-                                </div>
+                <div class="row">
+                    <div class="col menugroup">
+                        <div class="menunavontop">
+                            <div class="mainlogo">
+                                <a href="{{ url('index') }}">
+                                    <img src="{{ asset('public/frontend/images/mainlogo.svg') }}" alt="">
+                                </a>
                             </div>
-                            <div class="col-lg-6 g-0">
-                                <div class="row mt-3">
-                                    <div class="col-lg-4 col-xl-3 g-0">
-                                        <div class="mainmenu">
-                                            <!-- <li><a href="{{ url('product_index') }}"><i class="fi fi-rr-apps"></i> สินค้า</a></li> -->
-                                            <li>
-                                                <div class="cd-dropdown-wrapper">
-                                                    <a class="cd-dropdown-trigger" href="#0">
-                                                        <i class="fi fi-rr-apps"></i>
-                                                        <i class="fi fi-sr-apps"></i>
-                                                        สินค้า</a>
-                                                    <nav class="cd-dropdown">
+                            <div class="menuprdandservice">
+                                <div class="mainmenu">
+                                    <!-- <li><a href="{{ url('product_index') }}"><i class="fi fi-rr-apps"></i> สินค้า</a></li> -->
+                                    <li>
+                                        <div class="cd-dropdown-wrapper">
+                                            <a class="cd-dropdown-trigger" href="#0">
+                                                <i class="fi fi-rr-apps"></i>
+                                                <i class="fi fi-sr-apps"></i>
+                                                สินค้า</a>
+                                            <nav class="cd-dropdown">
 
-                                                        <ul class="cd-dropdown-content">
-                                                            @if (!empty($category1_inc))
-                                                                @foreach ($category1_inc as $r_inc)
-                                                                    <li class="has-children">
-                                                                        <a href="https://codyhouse.co/?p=748">{{ $r_inc->category1_name }}
-                                                                        </a>
-                                                                        <ul class="cd-dropdown-icons is-hidden">
-                                                                            <div class="row">
-                                                                                @php
-                                                                                    $category2_inc = DB::table('category2')
-                                                                                        ->where('category1_id', '=', $r_inc->category1_id)
-                                                                                        ->orderBy('category2_id', 'asc')
-                                                                                        ->get();
-                                                                                @endphp
+                                                <ul class="cd-dropdown-content">
+                                                    @if (!empty($category1_inc))
+                                                        @foreach ($category1_inc as $r_inc)
+                                                            <li class="has-children">
+                                                                <a href="https://codyhouse.co/?p=748">{{ $r_inc->category1_name }}
+                                                                </a>
+                                                                <ul class="cd-dropdown-icons is-hidden">
+                                                                    <div class="row"
+                                                                        style="columns: 4;   display: block;">
+                                                                        @php
+                                                                            $category2_inc = DB::table('category2')
+                                                                                ->where('category1_id', '=', $r_inc->category1_id)
+                                                                                ->orderBy('category2_id', 'asc')
+                                                                                ->get();
+                                                                        @endphp
 
-                                                                                @if (!empty($category2_inc))
-                                                                                    @foreach ($category2_inc as $r2_inc)
-                                                                                        <div class="col-md-3">
-                                                                                            <div class="maincatname">
-                                                                                                <a
-                                                                                                    href="{{ url('product/' . $r2_inc->category2_id) }}">{{ $r2_inc->category2_name }}</a>
-                                                                                            </div>
-                                                                                            @php
-                                                                                                $category3_inc = DB::table('category3')
-                                                                                                    ->where('category2_id', '=', $r2_inc->category2_id)
-                                                                                                    ->orderBy('category3_id', 'asc')
-                                                                                                    ->get();
-                                                                                            @endphp
+                                                                        @if (!empty($category2_inc))
+                                                                            @foreach ($category2_inc as $r2_inc)
+                                                                                <div class="col-md-3"
+                                                                                    style="    break-inside: avoid;
+    width: 100%;">
+                                                                                    <div class="maincatname">
+                                                                                        <a
+                                                                                            href="{{ url('product/' . $r2_inc->category2_id) }}">{{ $r2_inc->category2_name }}</a>
+                                                                                    </div>
+                                                                                    @php
+                                                                                        $category3_inc = DB::table('category3')
+                                                                                            ->where('category2_id', '=', $r2_inc->category2_id)
+                                                                                            ->orderBy('category3_id', 'asc')
+                                                                                            ->get();
+                                                                                    @endphp
 
-                                                                                            @if (!empty($category3_inc))
-                                                                                                @foreach ($category3_inc as $r3_inc)
-                                                                                                    <li>
-                                                                                                        <a class="cd-dropdown-item item-1"
-                                                                                                            href="{{ url('product_sub/' . $r3_inc->category3_id) }}">
-                                                                                                            {{ $r3_inc->category3_name }}
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                @endforeach
-                                                                                            @endif
-                                                                                            {{-- <li>
+                                                                                    @if (!empty($category3_inc))
+                                                                                        @foreach ($category3_inc as $r3_inc)
+                                                                                            <li>
+                                                                                                <a class="cd-dropdown-item item-1"
+                                                                                                    href="{{ url('product_sub/' . $r3_inc->category3_id) }}">
+                                                                                                    {{ $r3_inc->category3_name }}
+                                                                                                </a>
+                                                                                            </li>
+                                                                                        @endforeach
+                                                                                    @endif
+                                                                                    {{-- <li>
                                                                                 <a class="cd-dropdown-item item-1"
                                                                                     href="#">
                                                                                     กระดาษความร้อน สลิปกระดาษ
                                                                                 </a>
                                                                             </li> --}}
 
-                                                                                        </div>
-                                                                                    @endforeach
-                                                                                @endif
-                                                                                {{-- <div class="col-lg-4">
+                                                                                </div>
+                                                                            @endforeach
+                                                                        @endif
+                                                                        {{-- <div class="col-lg-4">
                                                                             <div class="maincatname">
                                                                                 ผลิตภัณฑ์กระดาษ </div>
                                                                             <li>
@@ -119,14 +120,14 @@
                                                                             </li>
 
                                                                         </div> --}}
-                                                                            </div>
+                                                                    </div>
 
-                                                                        </ul>
-                                                                        <!-- .cd-dropdown-icons -->
-                                                                    </li>
-                                                                @endforeach
-                                                            @endif
-                                                            {{-- <li class="has-children">
+                                                                </ul>
+                                                                <!-- .cd-dropdown-icons -->
+                                                            </li>
+                                                        @endforeach
+                                                    @endif
+                                                    {{-- <li class="has-children">
                                                                 <a href="https://codyhouse.co/?p=748">ไอทีและอิเล็คทรอนิกซ์
                                                                 </a>
                                                                 <ul class="cd-dropdown-icons is-hidden">
@@ -195,49 +196,163 @@
                                                                 </ul>
                                                             </li> --}}
 
-                                                            <!-- .has-children -->
+                                                    <!-- .has-children -->
 
-                                                        </ul>
+                                                </ul>
 
-                                                    </nav>
-                                                    <!-- .cd-dropdown -->
-                                                </div>
+                                            </nav>
+                                            <!-- .cd-dropdown -->
+                                        </div>
 
-                                            </li>
-                                            <li><a href="{{ url('service') }}"><i class="fi fi-rr-apps"></i> บริการ</a>
-                                                <ul class="submenuone">
-                                                    <li><a
+                                    </li>
+
+
+
+                                    <li>
+                                        <div class="cd-dropdown-wrapper">
+                                            <a class="cd-dropdown-trigger" href="#1">
+                                                <i class="fi fi-rr-apps"></i>
+                                                <i class="fi fi-sr-apps"></i>
+                                                บริการ</a>
+                                            <nav class="cd-dropdown">
+
+                                                <ul class="cd-dropdown-content">
+                                                    <li class="has-children">
+                                                        <a
                                                             href="{{ url('service1') }}">ซ่อมเครื่องพิมพ์สำเนาระบบดิจิตอล</a>
                                                     </li>
-                                                    <li><a href="{{ url('service2') }}">บริการซ่อมเครื่องถ่ายเอกสาร</a>
+                                                    <li class="has-children">
+                                                        <a href="{{ url('service2') }}">บริการซ่อมเครื่องถ่ายเอกสาร</a>
                                                     </li>
-                                                    <li><a href="{{ url('service3') }}">บริการซ่อมเครื่อง Printer</a>
+                                                    <li class="has-children">
+                                                        <a href="{{ url('service3') }}">บริการซ่อมเครื่อง Printer</a>
                                                     </li>
-                                                    <li><a
+                                                    <li class="has-children">
+                                                        <a
                                                             href="{{ url('service4') }}">บริการซ่อมเครื่องพิมพ์สำนักงานอื่นๆ</a>
                                                     </li>
-                                                    <li><a href="{{ url('service5') }}">บริการตรวจเช็ค
-                                                            และทำความสะอาดเครื่องพิมพ์สำนักงาน</a></li>
+                                                    <li class="has-children">
+                                                        <a href="{{ url('service5') }}">บริการตรวจเช็ค
+                                                            และทำความสะอาดเครื่องพิมพ์สำนักงาน</a>
+                                                    </li>
+
+                                                    <!-- <li><a href="{{ url('service') }}"><i class="fi fi-rr-apps"></i> บริการ</a>
+                                                                <ul class="submenuone">
+                                                                    <li><a href="{{ url('service1') }}">ซ่อมเครื่องพิมพ์สำเนาระบบดิจิตอล</a></li>
+                                                                    <li><a href="{{ url('service2') }}">บริการซ่อมเครื่องถ่ายเอกสาร</a></li>
+                                                                    <li><a href="{{ url('service3') }}">บริการซ่อมเครื่อง Printer</a></li>
+                                                                    <li><a href="{{ url('service4') }}">บริการซ่อมเครื่องพิมพ์สำนักงานอื่นๆ</a></li>
+                                                                    <li><a href="{{ url('service5') }}">บริการตรวจเช็ค และทำความสะอาดเครื่องพิมพ์สำนักงาน</a></li>
+                                                                </ul>
+                                                            </li> -->
+
+
+                                                    {{-- <li class="has-children">
+                                                                <a href="https://codyhouse.co/?p=748">ไอทีและอิเล็คทรอนิกซ์
+                                                                </a>
+                                                                <ul class="cd-dropdown-icons is-hidden">
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            ปั้มน้ำ
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            ท่อพีพี
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            สปริงเกอร์
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            อุปกรณ์ประปา
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="has-children">
+                                                                <a href="https://codyhouse.co/?p=748">เฟอร์นิเจอร์สำนักงาน
+                                                                </a>
+                                                                <ul class="cd-dropdown-icons is-hidden">
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            test
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            test
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            test
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="has-children">
+                                                                <a
+                                                                    href="https://codyhouse.co/?p=748">วัสดุงานครัว</a>
+                                                                <ul class="cd-dropdown-icons is-hidden">
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            test
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            test
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="cd-dropdown-item item-1" href="#">
+                                                                            test
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li> --}}
+
+                                                    <!-- .has-children -->
+
                                                 </ul>
-                                            </li>
+
+                                            </nav>
+                                            <!-- .cd-dropdown -->
                                         </div>
-                                    </div>
-                                    <div class="col-lg-8 col-xl-9 g-0">
-                                        <div class="searchtop">
-                                            <div class="input-group">
-                                                <span class="input-group-text" id="basic-addon1"><i
-                                                        class="fi fi-rr-search"></i></span>
-                                                <input type="text" class="form-control search_pc_mobile"
-                                                    placeholder="ค้นหาสินค้ากับ ออฟฟิศ แคร์" aria-label="search"
-                                                    value="@if (!empty($keyword_)) {{ $keyword_ }} @endif"
-                                                    aria-describedby="basic-addon1" id="search_pc">
-                                            </div>
-                                        </div>
+
+                                    </li>
+
+
+                                    <!-- <li><a href="{{ url('service') }}"><i class="fi fi-rr-apps"></i> บริการ</a>
+                                                <ul class="submenuone">
+                                                    <li><a href="{{ url('service1') }}">ซ่อมเครื่องพิมพ์สำเนาระบบดิจิตอล</a></li>
+                                                    <li><a href="{{ url('service2') }}">บริการซ่อมเครื่องถ่ายเอกสาร</a></li>
+                                                    <li><a href="{{ url('service3') }}">บริการซ่อมเครื่อง Printer</a></li>
+                                                    <li><a href="{{ url('service4') }}">บริการซ่อมเครื่องพิมพ์สำนักงานอื่นๆ</a></li>
+                                                    <li><a href="{{ url('service5') }}">บริการตรวจเช็ค และทำความสะอาดเครื่องพิมพ์สำนักงาน</a></li>
+                                                </ul>
+                                            </li> -->
+                                </div>
+                            </div>
+                            <div class="searchbartop">
+                                <div class="searchtop">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i
+                                                class="fi fi-rr-search"></i></span>
+                                        <input type="text" class="form-control search_pc_mobile"
+                                            placeholder="ค้นหาสินค้ากับ ออฟฟิศ แคร์" aria-label="search"
+                                            value="@if (!empty($keyword_)) {{ $keyword_ }} @endif"
+                                            aria-describedby="basic-addon1" id="search_pc">
+                                            <input type="text" id="sun" autocomplete="off" style="width: 1px;height: 1px; border-color: #fff; color: #fff;opacity:0;">
+
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-lg-3 text-end">
+                            <div class="accttop text-end">
                                 <div class="acctmenu_topmenu mt-3">
                                     <ul>
                                         <li class="topcart" id="topcart_desktop"
@@ -263,8 +378,8 @@
                                                 aria-labelledby="offcanvasRightLabel">
                                                 <div class="offcanvas-header">
 
-                                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                                        aria-label="Close"></button>
+                                                    <button type="button" class="btn-close"
+                                                        data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                                 </div>
                                                 <div class="offcanvas-body">
                                                     <div class="join_us">
@@ -278,7 +393,8 @@
                                                         </div>
                                                         <div class="formdefault mt-4">
                                                             <div class="row">
-                                                                <form action="{{ url('saveMember') }}" method="post">
+                                                                <form action="{{ url('saveMember') }}"
+                                                                    method="post">
                                                                     @csrf
                                                                     <div class="col-lg-12">
                                                                         <div class="form-floating mb-3">
@@ -523,9 +639,8 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
+
             </div>
         </div>
         <div class="tagtopproduct">
@@ -726,6 +841,8 @@
                                         class="fi fi-rr-search"></i></span>
                                 <input type="text" class="form-control" placeholder="ค้นหาสินค้ากับ ออฟฟิศ แคร์"
                                     aria-label="search" aria-describedby="basic-addon1">
+                                    <input type="text" id="sun" autocomplete="off" style="width: 1px;height: 1px; border-color: #fff; color: #fff;opacity:0;">
+
                             </div>
                         </div>
                     </div>
@@ -982,8 +1099,9 @@
                 "_token": "{{ csrf_token() }}"
             }, function(data) {
                 // alert(data);
-                if (data == 'ส่งรหัสผ่านของคุณเรียบร้อย') {
-                    $("#txt_forget_password").html('<span style="color:green;">' + data + '</span>');
+                if (data == 'true') {
+                    $("#txt_forget_password").html(
+                        '<span style="color:green;">ได้ส่ง Reset รหัสผ่านไปทางอีเมล์ของคุณ</span>');
                 } else {
                     $("#txt_forget_password").html('<span style="color:red;">' + data + '</span>');
                 }

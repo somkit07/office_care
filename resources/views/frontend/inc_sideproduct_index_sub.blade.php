@@ -93,7 +93,7 @@
                                     ->where('category2_id', '=', $category_txt_inc->category2_id)
                                     ->get();
                             }
-                           
+                            
                         @endphp
                         @if (!empty($category3))
                             @foreach ($category3 as $r_inc)
@@ -107,10 +107,11 @@
                                     {{-- <li><a href="{{ url('product_sub/' . $r_inc->category3_id) }}">{{ $r_inc->category3_name }}
                                             <span>({{ count($product) }})</span></a></li> --}}
 
-                                    <li id="category_dispay{{ $r_inc->category3_id }}" style="display: block;"><label class="check-container">{{ $r_inc->category3_name }} <span class="count"
-                                                id="show-count-category{{ $r_inc->category3_id }}">({{ count($product) }})</span>
-                                            <input type="checkbox" class="product_sub"
-                                                id="product_sub{{ $r_inc->category3_id }}"
+                                    <li id="count-category_pro{{ $r_inc->category3_id }}" style="display: block;"><label
+                                            class="check-container">{{ $r_inc->category3_name }} <span class="count"
+                                                id="show-count-s{{ $r_inc->category3_id }}">({{ count($product) }})</span>
+                                            <input type="checkbox" class="product_sub" name="category3_id"
+                                                id="product_subs{{ $r_inc->category3_id }}"
                                                 value="{{ $r_inc->category3_id }}">
                                             <span class="checkmark"></span>
                                         </label></li>
@@ -174,8 +175,8 @@
                                 ->where('category3.category2_id', '=', $category2_id)
                                 ->orderBy('product.brand_id', 'asc')
                                 ->groupBy('brand.brand_id')
-                                ->skip(0)
-                                ->take(4)
+                                // ->skip(0)
+                                // ->take(4)
                                 ->get();
                             
                             $brand_inc2 = DB::table('brand')
@@ -202,10 +203,10 @@
                                 @endphp
 
                                 @if ($count > 0)
-                                    <li id="brand_dispay{{ $r_inc->brand_id }}" style="display:block;"><label
+                                    <li id="brand_dispayss{{ $r_inc->brand_id }}" style="display:block;"><label
                                             class="check-container">{{ $r_inc->brand_name }} <span class="count"
-                                                id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
-                                            <input type="checkbox" class="brand_id" id="brand_id{{ $r_inc->brand_id }}"
+                                                id="show-count-b{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                            <input type="checkbox" class="brand_id" id="brand_ids{{ $r_inc->brand_id }}"
                                                 value="{{ $r_inc->brand_id }}">
                                             <span class="checkmark"></span>
                                         </label></li>
@@ -213,19 +214,8 @@
                             @endforeach
                         @endif
 
-                        {{-- <li><label class="check-container">Brother <span class="count">(35)</span>
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label></li>
-                            <li><label class="check-container">Sharp <span class="count">(35)</span>
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label></li>
-                            <li><label class="check-container">EPSON <span class="count">(35)</span>
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label></li> --}}
-                        <div id="morebrands" class="collapse">
+                      
+                        {{-- <div id="morebrands" class="collapse">
                             @if (!empty($brand_inc2))
                                 @foreach ($brand_inc2 as $r_inc)
                                     @php
@@ -237,44 +227,33 @@
                                     @endphp
 
                                     @if ($count > 0)
-                                        <li id="brand_dispay{{ $r_inc->brand_id }}" style="display:block;"><label
+                                        <li id="brand_dispayss{{ $r_inc->brand_id }}" style="display:block;"><label
                                                 class="check-container">{{ $r_inc->brand_name }} <span class="count"
-                                                    id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                                    id="show-count-b{{ $r_inc->brand_id }}">({{ $count }})</span>
                                                 <input type="checkbox" class="brand_id" value="{{ $r_inc->brand_id }}">
                                                 <span class="checkmark"></span>
                                             </label></li>
                                     @endif
                                 @endforeach
                             @endif
-                            {{-- <li><label class="check-container">Brother <span class="count">(35)</span>
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label></li>
-                                <li><label class="check-container">Sharp <span class="count">(35)</span>
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label></li>
-                                <li><label class="check-container">EPSON <span class="count">(35)</span>
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label></li> --}}
-                        </div>
+                           
+                        </div> --}}
 
-                        <a data-bs-toggle="collapse" data-bs-target="#morebrands" class="morelist">+ ดูเพิ่มเติม</a>
+                        {{-- <a data-bs-toggle="collapse" data-bs-target="#morebrands" class="morelist" id="btn-morelist" style="display:block;">+ ดูเพิ่มเติม</a> --}}
 
                     </ul>
                 </div>
             </div>
- 
+
             <!-- Feature -->
             @if (!empty($feature_inc))
                 @php
-                // dd($feature_inc);
+                    // dd($feature_inc);
                     $i = 0;
                 @endphp
                 @foreach ($feature_inc as $r_inc)
                     @php
-                    //  dd($r_inc->name);
+                        //  dd($r_inc->name);
                         $i++;
                     @endphp
                     {{-- 454656 --}}
@@ -324,14 +303,16 @@
                                             @endphp
                                             @if (count($product_count) > 0)
                                                 {{-- @if ($count > 0) --}}
-                                                <li  id="feature_dispay{{ $r_incitem->id }}" style="display: block;"><label class="check-container">{{ $r_incitem->name }} <span
+                                                <li id="feature_dispayss{{ $r_incitem->id }}" style="display: block;">
+                                                    <label class="check-container">{{ $r_incitem->name }} <span
                                                             class="count"
-                                                            id="show-count-feature{{ $r_incitem->id }}">({{ count($product_count) }})</span>
+                                                            id="show-count-f{{ $r_incitem->id }}">({{ count($product_count) }})</span>
                                                         <input type="checkbox" class="feature_id"
-                                                            id="feature_id{{ $r_incitem->id }}"
+                                                            id="feature_ids{{ $r_incitem->id }}"
                                                             value="{{ $r_incitem->id }}">
                                                         <span class="checkmark"></span>
-                                                    </label></li>
+                                                    </label>
+                                                </li>
                                                 {{-- @endif --}}
                                             @endif
                                             @php
@@ -350,10 +331,18 @@
     </div>
 </section>
 
-<script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     var order_by = '';
     var page = '';
+    var pro_sun = '';
 
+    
     $(".refresh").click(function() {
         window.location.reload();
     });
@@ -394,15 +383,15 @@
     function Ffeature_id(e) {
         var checked = $(this).data("id");
 
-        if ($(this).is(':checked')) {
-            feature_id.push(checked);
-        } else {
+        // if ($(this).is(':checked')) {
+        //     feature_id.push(checked);
+        // } else {
             let index = feature_id.indexOf(JSON.stringify(e));
             if (index > -1) { // only splice array when item is found
                 feature_id.splice(index, 1); // 2nd parameter means remove one item only
             }
-        }
-        document.getElementById("feature_id" + JSON.stringify(e)).checked = false;
+        // }
+        document.getElementById("feature_ids" + JSON.stringify(e)).checked = false;
 
         ajaxFilterProduct();
         ajaxGetFilter();
@@ -427,6 +416,7 @@
     function Fproduct_sub(e) {
         var checked = $(this).data("id");
 
+        console.log(JSON.stringify(e));
         if ($(this).is(':checked')) {
             product_sub.push(checked);
         } else {
@@ -435,7 +425,7 @@
                 product_sub.splice(index, 1); // 2nd parameter means remove one item only
             }
         }
-        document.getElementById("product_sub" + JSON.stringify(e)).checked = false;
+        document.getElementById("product_subs" + JSON.stringify(e)).checked = false;
 
         ajaxFilterProduct();
         ajaxGetFilter();
@@ -467,7 +457,7 @@
                 brand_id.splice(index, 1); // 2nd parameter means remove one item only
             }
         }
-        document.getElementById("brand_id" + JSON.stringify(e)).checked = false;
+        document.getElementById("brand_ids" + JSON.stringify(e)).checked = false;
         ajaxFilterProduct();
         ajaxGetFilter();
     }
@@ -520,12 +510,14 @@
             $(".span_no1").html(data_split[2]);
             $(".span_no2").html(data_split[3]);
             $(".span_total").html(data_split[4]);
+            pro_sun = $(".pro_sun").val();
+            ajaxGetFilterBrandproduct(pro_sun)
         });
     }
 
     function ajaxGetFilter() {
         $.post('{{ url('ajaxGetFilter') }}', {
-            category3_id: $("#category3_id").val(),
+            category3_id: product_sub,
             category2_id: '{{ $category2_id }}',
             brand_id: brand_id,
             product_sub: product_sub,
@@ -542,30 +534,132 @@
             $(".filterselect").html(data);
         });
 
-        $.post('{{ url('ajaxGetFilterBrand') }}', {
-            category3_id: $("#category3_id").val(),
+        // $.post('{{ url('ajaxGetFilterBrandproduct') }}', {
+        //     category3_id: $("#category3_id").val(),
+        //     category2_id: '{{ $category2_id }}',
+        //     brand_id: brand_id,
+        //     color_id: color_id,
+        //     price_min: $(".price-min").val(),
+        //     price_max: $(".price-max").val(),
+        //     order_by: order_by,
+        //     feature_id: feature_id,
+        //     page: page,
+        //     "_token": "{{ csrf_token() }}"
+        // }, function(data) {
+
+        //     console.log(data);
+        //     data.brand.forEach(function(value) {
+        //         $("#show-count-b" + value.brand_id).html('(' + value.count + ')');
+        //         $("#show-count-b_index" + value.brand_id).html('(' + value.count + ')');
+
+        //         var myEle = document.getElementById("brand_dispayss" + value.brand_id);
+        //         if (myEle) {
+        //             if (value.count == 0) {
+        //                 console.log(value.brand_id);
+        //                 document.getElementById("brand_dispayss" + value.brand_id).style.display = 'none';
+        //                 document.getElementById("brand_dispayss_index" + value.brand_id).style.display = 'none';
+
+        //             } else {
+        //                 document.getElementById("brand_dispayss" + value.brand_id).style.display =
+        //                     "block";
+        //                     document.getElementById("brand_dispayss_index" + value.brand_id).style.display =
+        //                     "block";
+        //             }
+                    
+        //         }
+
+        //     })
+        //     // data.color.forEach(function (value) {
+        //     //     $("#show-count-color"+value.color_id).html('('+value.count+')');
+        //     // })
+        //     data.feature.forEach(function(value) {
+        //         $("#show-count-f" + value.id).html('(' + value.count + ')');
+        //         $("#show-count-f_index" + value.id).html('(' + value.count + ')');
+                
+        //         var myElefeature = document.getElementById("feature_dispayss" + value.id);
+        //         if (myElefeature) {
+        //             if (value.count == 0) {
+        //                 console.log(value.id);
+        //                 document.getElementById("feature_dispayss" + value.id).style.display = 'none';
+        //                 document.getElementById("feature_dispayss_index" + value.id).style.display = 'none';
+
+        //             } else {
+        //                 document.getElementById("feature_dispayss" + value.id).style.display =
+        //                     "block";
+        //                     document.getElementById("feature_dispayss_index" + value.id).style.display =
+        //                     "block";
+        //             }
+        //         }
+        //     })
+            
+        //     data.category3.forEach(function(value) {
+        //         $("#show-count-s"+ value.category3_id).html('(' + value.count + ')');
+        //         // console.log(value.category3_id+'/'+value.count);
+        //         $("#show-count-category" + value.category3_id).html('(' + value.count + ')');
+        //         $("#show-count-category_index" + value.category3_id).html('(' + value.count + ')');
+
+        //         // if (document.getElementById("show-count-category" + value.category3_id) != null) {
+        //         //     document.getElementById("show-count-category" + value.category3_id).innerHTML =
+        //         //         '(' + value.count + ')';
+
+        //         //     console.log(document.getElementById("show-count-category" + value.category3_id)
+        //         //         .innerHTML);
+        //         // }
+        //         var myElecategory = document.getElementById("count-category_pro" + value.category3_id);
+        //         if (myElecategory) { 
+        //             if (value.count == 0) {
+                        
+        //                 document.getElementById("count-category_pro" + value.category3_id).style.display ='none';
+        //                 document.getElementById("count-category_pro_index" + value.category3_id).style.display ='none';
+
+        //             } else {
+        //                 document.getElementById("count-category_pro" + value.category3_id).style.display =
+        //                     "block";
+        //                     document.getElementById("count-category_pro_index" + value.category3_id).style.display =
+        //                     "block";
+        //             }
+        //         }
+        //     })
+
+        //     // $(".filterselectbrand").html(data);
+        // });
+    }
+
+    function ajaxGetFilterBrandproduct(pro_sun) {
+        $.post('{{ url('ajaxGetFilterBrandproduct') }}', {
+            category3_id: product_sub,
             category2_id: '{{ $category2_id }}',
             brand_id: brand_id,
             color_id: color_id,
+            pro_sun: pro_sun,
             price_min: $(".price-min").val(),
             price_max: $(".price-max").val(),
             order_by: order_by,
             feature_id: feature_id,
             page: page,
+           
             "_token": "{{ csrf_token() }}"
         }, function(data) {
 
+            console.log(data);
             data.brand.forEach(function(value) {
-                $("#show-count-brand" + value.brand_id).html('(' + value.count + ')');
-                var myEle = document.getElementById("brand_dispay" + value.brand_id);
+                $("#show-count-b" + value.brand_id).html('(' + value.count + ')');
+                $("#show-count-b_index" + value.brand_id).html('(' + value.count + ')');
+
+                var myEle = document.getElementById("brand_dispayss" + value.brand_id);
                 if (myEle) {
                     if (value.count == 0) {
                         console.log(value.brand_id);
-                        document.getElementById("brand_dispay" + value.brand_id).style.display = 'none';
+                        document.getElementById("brand_dispayss" + value.brand_id).style.display = 'none';
+                        document.getElementById("brand_dispayss_index" + value.brand_id).style.display = 'none';
+
                     } else {
-                        document.getElementById("brand_dispay" + value.brand_id).style.display =
-                        "block";
+                        document.getElementById("brand_dispayss" + value.brand_id).style.display =
+                            "block";
+                            document.getElementById("brand_dispayss_index" + value.brand_id).style.display =
+                            "block";
                     }
+                    
                 }
 
             })
@@ -573,29 +667,50 @@
             //     $("#show-count-color"+value.color_id).html('('+value.count+')');
             // })
             data.feature.forEach(function(value) {
-                $("#show-count-feature" + value.id).html('(' + value.count + ')');
-                var myElefeature = document.getElementById("feature_dispay" + value.id);
+                $("#show-count-f" + value.id).html('(' + value.count + ')');
+                $("#show-count-f_index" + value.id).html('(' + value.count + ')');
+                
+                var myElefeature = document.getElementById("feature_dispayss" + value.id);
                 if (myElefeature) {
                     if (value.count == 0) {
                         console.log(value.id);
-                        document.getElementById("feature_dispay" + value.id).style.display = 'none';
+                        document.getElementById("feature_dispayss" + value.id).style.display = 'none';
+                        document.getElementById("feature_dispayss_index" + value.id).style.display = 'none';
+
                     } else {
-                        document.getElementById("feature_dispay" + value.id).style.display =
-                        "block";
+                        document.getElementById("feature_dispayss" + value.id).style.display =
+                            "block";
+                            document.getElementById("feature_dispayss_index" + value.id).style.display =
+                            "block";
                     }
                 }
             })
-            console.log(data.category3);
+            
             data.category3.forEach(function(value) {
+                $("#show-count-s"+ value.category3_id).html('(' + value.count + ')');
+                // console.log(value.category3_id+'/'+value.count);
                 $("#show-count-category" + value.category3_id).html('(' + value.count + ')');
-                var myElecategory = document.getElementById("category_dispay" + value.category3_id);
-                if (myElecategory) {
+                $("#show-count-category_index" + value.category3_id).html('(' + value.count + ')');
+
+                // if (document.getElementById("show-count-category" + value.category3_id) != null) {
+                //     document.getElementById("show-count-category" + value.category3_id).innerHTML =
+                //         '(' + value.count + ')';
+
+                //     console.log(document.getElementById("show-count-category" + value.category3_id)
+                //         .innerHTML);
+                // }
+                var myElecategory = document.getElementById("count-category_pro" + value.category3_id);
+                if (myElecategory) { 
                     if (value.count == 0) {
-                        console.log(value.category3_id);
-                        document.getElementById("category_dispay" + value.category3_id).style.display = 'none';
+                        
+                        document.getElementById("count-category_pro" + value.category3_id).style.display ='none';
+                        document.getElementById("count-category_pro_index" + value.category3_id).style.display ='none';
+
                     } else {
-                        document.getElementById("category_dispay" + value.category3_id).style.display =
-                        "block";
+                        document.getElementById("count-category_pro" + value.category3_id).style.display =
+                            "block";
+                            document.getElementById("count-category_pro_index" + value.category3_id).style.display =
+                            "block";
                     }
                 }
             })

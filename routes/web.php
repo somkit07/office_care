@@ -32,6 +32,8 @@ Route::get('/account_profile', 'FrontendController@account_profile');
 
 Route::get('/account_wishlist', 'FrontendController@account_wishlist');
 
+Route::post('/ajaxSaveAddressData', 'FrontendController@ajaxSaveAddressData');
+
 Route::get('/brands', 'FrontendController@brands');
 
 Route::get('/cart_success/{order_id}', 'FrontendController@cart_success');
@@ -39,6 +41,8 @@ Route::get('/cart_success/{order_id}', 'FrontendController@cart_success');
 Route::get('/cart', 'FrontendController@cart');
 
 Route::get('/contact', 'FrontendController@contact');
+
+Route::get('/forget_password/{member_token}', 'FrontendController@forget_password');
 
 Route::get('/m_acct', 'FrontendController@m_acct');
 
@@ -113,6 +117,7 @@ Route::post('/ajaxFilterProduct', 'FrontendController@ajaxFilterProduct');
 Route::post('/ajaxFilterProduct3', 'FrontendController@ajaxFilterProduct3');
 Route::post('/ajaxGetFilter', 'FrontendController@ajaxGetFilter');
 Route::post('/ajaxGetFilterBrand', 'FrontendController@ajaxGetFilterBrand');
+Route::post('/ajaxGetFilterBrandproduct', 'FrontendController@ajaxGetFilterBrandproduct');
 
 Route::get('/savePdf', 'FrontendController@savePdf');
 
@@ -143,6 +148,10 @@ Route::get('/service4', 'FrontendController@service4');
 Route::get('/service5', 'FrontendController@service5');
 
 Route::post('/forgetPassword', 'FrontendController@forgetPassword');
+
+Route::get('/forget_password/{member_token}', 'FrontendController@forget_password');
+
+Route::post('/ajaxForgetPassword', 'FrontendController@ajaxForgetPassword');
 
 Route::get('/testCustomClass', 'FrontendController@testCustomClass');
 

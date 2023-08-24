@@ -10,6 +10,7 @@
                 <tr>
                     <th>ID</th>
 					<th>Image</th>
+					<th>Image2</th>
 					<th>Category 1</th>
                     <th>Category 2</th>
 					<th>Max Price</th>
@@ -48,6 +49,7 @@
 					"columns": [
 						{"data" : "category2_id"},
 						{"data" : "category2_image"},
+						{"data" : "category2_image2"},
 						{"data" : "category1_name"},
 						{"data" : "category2_name"},
 						{"data" : "category2_max_price"},

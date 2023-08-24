@@ -20,7 +20,7 @@
         <div class="form-group">
             <label class="col-md-3 control-label">Category 1</label>
             <div class="col-md-9">
-                <select name="category1_id" id="category1_id" class="form-control" onchange="changeCategory1(this.value);" required>
+                <select name="category1_id" id="category1_id" class="form-control select2" onchange="changeCategory1(this.value);" required>
                     <option value="">Please Select</option>
 @if(!empty($category1))
     @foreach($category1 as $r)
@@ -100,5 +100,10 @@
                 $("#category2_id").html(data);
             });
         }
+
+        $(document).ready(function() {
+        $('.select2').select2();
+    });
+
 	</script>
 @endsection

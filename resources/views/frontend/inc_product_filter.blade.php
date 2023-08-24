@@ -174,9 +174,9 @@
                                     @endphp
 
                                     @if ($count > 0)
-                                        <li id="brand_dispay{{ $r_inc->brand_id }}">
+                                        <li id="brand_dispay_search{{ $r_inc->brand_id }}">
                                             <label class="check-container">{{ $r_inc->brand_name }} <span
-                                                    class="count" id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                                    class="count" id="show-count-brand_search{{ $r_inc->brand_id }}">({{ $count }})</span>
                                                 <input type="checkbox" class="brand_id"
                                                     id="brand_id{{ $r_inc->brand_id }}" value="{{ $r_inc->brand_id }}">
                                                 <span class="checkmark"></span>
@@ -245,8 +245,8 @@
                                         @endphp
 
                                         @if ($count > 0)
-                                            <li id="brand_dispay{{ $r_inc->brand_id }}"><label class="check-container">{{ $r_inc->brand_name }} <span
-                                                        class="count" id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                            <li id="brand_dispay_search{{ $r_inc->brand_id }}"><label class="check-container">{{ $r_inc->brand_name }} <span
+                                                        class="count" id="show-count-brand_search{{ $r_inc->brand_id }}">({{ $count }})</span>
                                                     <input type="checkbox" class="brand_id"
                                                         id="brand_id{{ $r_inc->brand_id }}"
                                                         value="{{ $r_inc->brand_id }}">
@@ -329,8 +329,8 @@
                                             @endphp
                                             @if (count($product_count) > 0)
                                                 {{-- @if ($count > 0) --}}
-                                                <li id="feature_dispay{{ $r_incitem->id }}" style="display: block;"><label class="check-container">{{ $r_incitem->name }} <span
-                                                            class="count" id="show-count-feature{{ $r_incitem->id }}">({{ count($product_count) }})</span>
+                                                <li id="feature_dispay_search{{ $r_incitem->id }}" style="display: block;"><label class="check-container">{{ $r_incitem->name }} <span
+                                                            class="count" id="show-count-feature_search{{ $r_incitem->id }}">({{ count($product_count) }})</span>
                                                         <input type="checkbox" class="feature_id"
                                                             id="feature_id{{ $r_incitem->id }}"
                                                             value="{{ $r_incitem->id }}">
@@ -490,7 +490,7 @@
         $.post('{{ url('ajaxGetFilterBrand') }}', {
             category3_id: $("#category3_id").val(),
             brand_id: brand_id,
-            color_id: color_id,
+            // color_id: color_id,
             price_min: $(".price-min").val(),
             price_max: $(".price-max").val(),
             order_by: order_by,
@@ -500,41 +500,49 @@
         }, function(data) {
             // console.log('sssssssssssss');
             data.brand.forEach(function (value) {
-                $("#show-count-brand"+value.brand_id).html('('+value.count+')');
-                var myEle = document.getElementById("brand_dispay" + value.brand_id);
+                $("#show-count-brand_search"+value.brand_id).html('('+value.count+')');
+                $("#show-count-brand_search_index"+value.brand_id).html('('+value.count+')');
+                var myEle = document.getElementById("brand_dispay_search" + value.brand_id);
                 if (myEle) {
                     if (value.count == 0) {
                         console.log(value.brand_id);
-                        document.getElementById("brand_dispay" + value.brand_id).style.display = 'none';
+                        document.getElementById("brand_dispay_search" + value.brand_id).style.display = 'none';
+                        document.getElementById("brand_dispay_search_index" + value.brand_id).style.display = 'none';
                     } else {
-                        document.getElementById("brand_dispay" + value.brand_id).style.display =
+                        document.getElementById("brand_dispay_search" + value.brand_id).style.display =
+                        "block";
+                        document.getElementById("brand_dispay_search_index" + value.brand_id).style.display =
                         "block";
                     }
                 }
             })
-            data.color.forEach(function (value) {
-                $("#show-count-color"+value.color_id).html('('+value.count+')');
+            // data.color.forEach(function (value) {
+            //     $("#show-count-color_search"+value.color_id).html('('+value.count+')');
 
-                var myElecolor = document.getElementById("color_dispay" + value.color_id);
-                if (myElecolor) {
-                    if (value.count == 0) {
-                        console.log(value.color_id);
-                        document.getElementById("color_dispay" + value.color_id).style.display = 'none';
-                    } else {
-                        document.getElementById("color_dispay" + value.color_id).style.display =
-                        "block";
-                    }
-                }
-            })
+            //     var myElecolor = document.getElementById("color_dispay_search" + value.color_id);
+            //     if (myElecolor) {
+            //         if (value.count == 0) {
+            //             console.log(value.color_id);
+            //             document.getElementById("color_dispay_search" + value.color_id).style.display = 'none';
+            //         } else {
+            //             document.getElementById("color_dispay_search" + value.color_id).style.display =
+            //             "block";
+            //         }
+            //     }
+            // })
             data.feature.forEach(function (value) {
-                $("#show-count-feature"+value.id).html('('+value.count+')');
-                var myElefeature = document.getElementById("feature_dispay" + value.id);
+                $("#show-count-feature_search"+value.id).html('('+value.count+')');
+                $("#show-count-feature_search_index"+value.id).html('('+value.count+')');
+                var myElefeature = document.getElementById("feature_dispay_search" + value.id);
                 if (myElefeature) {
                     if (value.count == 0) {
                         console.log(value.id);
-                        document.getElementById("feature_dispay" + value.id).style.display = 'none';
+                        document.getElementById("feature_dispay_search" + value.id).style.display = 'none';
+                        document.getElementById("feature_dispay_search_index" + value.id).style.display = 'none';
                     } else {
-                        document.getElementById("feature_dispay" + value.id).style.display =
+                        document.getElementById("feature_dispay_search" + value.id).style.display =
+                        "block";
+                        document.getElementById("feature_dispay_search_index" + value.id).style.display =
                         "block";
                     }
                 }

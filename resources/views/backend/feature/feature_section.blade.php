@@ -43,7 +43,7 @@
                     <input type="hidden" id="fselection_id" name="fselection_id">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Category 3</label>
-                        <select name="category3_id" id="category3_id" class="form-control" required>
+                        <select name="category3_id" id="category3_id" class="form-select select2cate" required>
                             <option value="">Please Select</option>
                             @if(!empty($category3))
                                 @foreach($category3 as $r)
@@ -97,6 +97,7 @@
 @endsection
 
 @section('script_footer')
+
 <script>
     $(document).ready(function() {
         App.init();
@@ -310,6 +311,23 @@
 		return false;
     });
 
+ 
+    $(document).on('click', '.btn-warning', function(e){
+        e.preventDefault();
+        $("#category3_id").select2({
+            dropdownParent: $('#featureSectionModal .modal-content')
+        });
+
+        // $('.select2cate').select2();
+    });
+
+    // In your Javascript (external .js resource or <script> tag)
+    // $(document).ready(function() {
+        // $('#category3_id').select2();
+    // });
+
 </script>
+
+
 
 @endsection

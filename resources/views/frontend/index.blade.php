@@ -125,9 +125,19 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="price pt-3">
+                                                {{-- <div class="price pt-3">
                                                     ฿ {{ number_format($r->product_price, 2) }} {!! checkPrice($r->product_before_discount, $r->product_price) !!}
-                                                </div>
+                                                </div> --}}
+                                                @if ($r->product_before_discount != $r->product_price)
+                                                    <div class="pt-3 price">
+                                                        ฿ {{ number_format($r->product_price, 2) }}
+                                                        {!! checkPrice($r->product_before_discount, $r->product_price) !!}
+                                                    </div>
+                                                @else
+                                                    <div class="pt-3 priceoriginal">
+                                                        ฿ {{ number_format($r->product_price, 2) }}
+                                                    </div>
+                                                @endif
                                                 <a href="{{ url('product_detail/' . $r->product_id) }}"
                                                     class="prddetails">
                                                     {{ $r->product_name }}
@@ -302,7 +312,7 @@
                                                     src="{{ asset('public/uploads/news/' . $r->news_promotion_image) }}"
                                                     alt=""></a>
                                         </figure>
-                                        <a href="">
+                                        <a href="{{ url('news_detail/' . $r->news_promotion_id) }}">
                                             <div class="newscontent">
                                                 {{ $r->news_promotion_name }}
                                             </div>

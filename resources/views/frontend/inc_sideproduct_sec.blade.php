@@ -60,7 +60,7 @@
 
 <div class="d-none d-sm-none d-md-none d-lg-block d-xl-block">
     <section id="category_menu_sec">
-        <h2>ตัวกรองสินค้า 
+        <h2>ตัวกรองสินค้า
             <button class="btn text-right refresh" type="button">Clear all</button>
         </h2>
         <div class="filterselect">
@@ -69,36 +69,7 @@
         </div>
 
         <div class="accordion" id="accordionPanelsStayOpenExample">
-            {{-- @if (!empty($category_txt))
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                        aria-controls="panelsStayOpen-collapseOne">
-    @if (!empty($category_txt))
-        {{ $category_txt->category2_name }}
-    @endif
-                    </button>
-                </h2>
-                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                    aria-labelledby="panelsStayOpen-headingOne">
-                    <div class="accordion-body">
-                        <ul class="menulsact">
-    @if (!empty($category_txt))
-        @php
-        $product = DB::table('product')
-            ->where('category3_id', '=', $category_txt->category3_id)
-            ->get();
-        @endphp
-                            <li><i class="fi fi-sr-checkbox"></i> {{ $category_txt->category3_name}} <span class="count">({{ count($product) }})</span></li>
-    @endif
-                        </ul>
-                    </div>
-                </div>
-            </div>
-@else
-    ตัวกรอง
-@endif --}}
+
             <div class="accordion-item">
                 <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -137,7 +108,7 @@
                         {{-- <div class="filterselectbrand"></div> --}}
                         <ul class="menu">
                             @php
-                                $brand_inc = DB::table('brand') 
+                                $brand_inc = DB::table('brand')
                                     ->orderBy('brand_id', 'asc')
                                     ->skip(0)
                                     ->take(4)
@@ -162,10 +133,11 @@
                                     @endphp
 
                                     @if ($count > 0)
-                                        <li id="brand_dispay{{ $r_inc->brand_id }}"><label class="check-container">{{ $r_inc->brand_name }} <span
-                                                    class="count" id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                        <li id="brand_dispay{{ $r_inc->brand_id }}"><label
+                                                class="check-container">{{ $r_inc->brand_name }} <span class="count"
+                                                    id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
                                                 <input type="checkbox" class="brand_id" value="{{ $r_inc->brand_id }}"
-                                                    id="brand_id{{ $r_inc->brand_id }}">
+                                                    id="brand_id_sub{{ $r_inc->brand_id }}">
                                                 <span class="checkmark"></span>
                                             </label>
                                         </li>
@@ -184,33 +156,34 @@
                                     <input type="checkbox">
                                     <span class="checkmark"></span>
                                 </label></li> --}}
-                                @if (count($brand_inc2)<4)
-                                     <div id="morebrands" class="collapse">
-                                @endif
-                           
-                                @if (!empty($brand_inc2))
-                                    @foreach ($brand_inc2 as $r_inc)
-                                        @php
-                                            $product = DB::table('product')
-                                                ->where('product.brand_id', '=', $r_inc->brand_id)
-                                                ->where('product.category3_id', '=', $category3_id)
-                                                ->get();
-                                            
-                                            $count = count($product);
-                                        @endphp
+                            @if (count($brand_inc2) < 4)
+                                <div id="morebrands" class="collapse">
+                            @endif
 
-                                        @if ($count > 0)
-                                            <li id="brand_dispay{{ $r_inc->brand_id }}"><label class="check-container">{{ $r_inc->brand_name }} <span
-                                                        class="count" id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
-                                                    <input type="checkbox" class="brand_id"
-                                                        id="brand_id{{ $r_inc->brand_id }}"
-                                                        value="{{ $r_inc->brand_id }}">
-                                                    <span class="checkmark"></span>
-                                                </label></li>
-                                        @endif
-                                    @endforeach
-                                @endif
-                                {{-- <li><label class="check-container">Brother <span class="count">(35)</span>
+                            @if (!empty($brand_inc2))
+                                @foreach ($brand_inc2 as $r_inc)
+                                    @php
+                                        $product = DB::table('product')
+                                            ->where('product.brand_id', '=', $r_inc->brand_id)
+                                            ->where('product.category3_id', '=', $category3_id)
+                                            ->get();
+                                        
+                                        $count = count($product);
+                                    @endphp
+
+                                    @if ($count > 0)
+                                        <li id="brand_dispay{{ $r_inc->brand_id }}"><label
+                                                class="check-container">{{ $r_inc->brand_name }} <span class="count"
+                                                    id="show-count-brand{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                                <input type="checkbox" class="brand_id"
+                                                    id="brand_id_sub{{ $r_inc->brand_id }}"
+                                                    value="{{ $r_inc->brand_id }}">
+                                                <span class="checkmark"></span>
+                                            </label></li>
+                                    @endif
+                                @endforeach
+                            @endif
+                            {{-- <li><label class="check-container">Brother <span class="count">(35)</span>
                                         <input type="checkbox">
                                         <span class="checkmark"></span>
                                     </label></li>
@@ -222,151 +195,151 @@
                                         <input type="checkbox">
                                         <span class="checkmark"></span>
                                     </label></li> --}}
-                             @if (count($brand_inc2)<4)
-                               </div>    
-                               <a data-bs-toggle="collapse" data-bs-target="#morebrands" class="morelist">+ ดูเพิ่มเติม</a>
- 
-                            @endif
-
-                           
-                        </ul>
+                            @if (count($brand_inc2) < 4)
                     </div>
+                    <a data-bs-toggle="collapse" data-bs-target="#morebrands" class="morelist">+ ดูเพิ่มเติม</a>
+                    @endif
+
+
+                    </ul>
                 </div>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseThree1" aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseThree1">
-                        สี
-                    </button>
-                </h2>
-                <div id="panelsStayOpen-collapseThree1" class="accordion-collapse collapse"
-                    aria-labelledby="panelsStayOpen-headingThree">
-                    <div class="accordion-body">
-                        <ul class="menucolor">
-                            @php
-                                $color_inc = DB::table('color')
-                                    ->orderBy('color_id', 'asc')
-                                    ->get();
-                            @endphp
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseThree1" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseThree1">
+                    สี
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree1" class="accordion-collapse collapse"
+                aria-labelledby="panelsStayOpen-headingThree">
+                <div class="accordion-body">
+                    <ul class="menucolor">
+                        @php
+                            $color_inc = DB::table('color')
+                                ->orderBy('color_id', 'asc')
+                                ->get();
+                        @endphp
 
-                            @if (!empty($color_inc))
-                                @foreach ($color_inc as $r_inc)
-                                    @php
-                                        $product = DB::table('product')
-                                            ->where('product.color_id', '=', $r_inc->color_id)
-                                            ->where('product.category3_id', '=', $category3_id)
-                                            ->get();
-                                        
-                                        $count = count($product);
-                                    @endphp
+                        @if (!empty($color_inc))
+                            @foreach ($color_inc as $r_inc)
+                                @php
+                                    $product = DB::table('product')
+                                        ->where('product.color_id', '=', $r_inc->color_id)
+                                        ->where('product.category3_id', '=', $category3_id)
+                                        ->get();
+                                    
+                                    $count = count($product);
+                                @endphp
 
-                                    @if ($count > 0)
-                                        <li id="color_dispay{{ $r_inc->color_id }}" style="display: block;">
-                                            <a href="#" onclick="filterProductSub('{{ $r_inc->color_id }}');"><span
-                                                    class="cl01 circlesty"
-                                                    style="background-color: {{ $r_inc->color_code }}"></span>
-                                                {{ $r_inc->color_name }} <span
-                                                    class="count" id="show-count-color{{ $r_inc->color_id }}">({{ $count }})</span></a>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            @endif
-                            {{-- <li>
+                                @if ($count > 0)
+                                    <li id="color_dispay{{ $r_inc->color_id }}" style="display: block;">
+                                        <a href="#" onclick="filterProductSub('{{ $r_inc->color_id }}');"><span
+                                                class="cl01 circlesty"
+                                                style="background-color: {{ $r_inc->color_code }}"></span>
+                                            {{ $r_inc->color_name }} <span class="count"
+                                                id="show-count-color{{ $r_inc->color_id }}">({{ $count }})</span></a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
+                        {{-- <li>
                                 <a href="#"><span class="cl02 circlesty"></span> ขาว<span class="count">(35)</span></a>
                             </li>
                             <li>
                                 <a href="#"><span class="cl03 circlesty"></span> ดำ <span class="count">(35)</span></a>
                             </li> --}}
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
             </div>
-
-            <!-- Feature -->
-            @if (!empty($feature_inc))
-           
-                @php 
-                    $i = 0;
-                @endphp
-                @foreach ($feature_inc as $r_inc)
-                    @php
-                        $i++;
-                    @endphp
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapse{{ $i }}" aria-expanded="false"
-                                aria-controls="panelsStayOpen-collapse{{ $i }}">
-                                {{ $r_inc->name }}
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapse{{ $i }}" class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-heading{{ $i }}">
-                            <div class="accordion-body">
-                                <ul class="menu">
-                                    @php
-                                        $feature_inc_item = DB::table('feature_selections')
-                                            ->join('features', 'feature_selections.id', 'features.feature_selection_id')
-                                            ->join('product_to_feature', 'product_to_feature.feature_id', 'features.id')
-                                            ->join('product', 'product.product_id', '=', 'product_to_feature.product_id')
-                                            ->where('features.feature_selection_id', '=', $r_inc->id)
-                                            ->where('feature_selections.category3_id', '=', $category3_id)
-                                            ->where('features.is_active', '=', 1)
-                                            ->select(
-                                                'features.id as id',
-                                                'features.name as name',
-                                                'feature_selections.id as feature_selections_id',
-                                                'product_to_feature.id as product_to_feature_id',
-                                                'product_to_feature.product_id as product_to_feature_product_id',
-                                                'product.product_id as product_id',
-                                                //DB::raw('COUNT(product.product_id) as product_count')
-                                            )
-                                            ->groupBy('features.id')
-                                            ->get();
-                                        
-                                        $i_inc = 1;
-                                        // dd($feature_inc_item);
-                                    @endphp
-                                    @if (!empty($feature_inc_item))
-                                        @foreach ($feature_inc_item as $r_incitem)
-                                            @php
-                                                $product_count = DB::table('product')
-                                                    ->select('product_to_feature.id')
-                                                    ->join('product_to_feature', 'product.product_id', '=', 'product_to_feature.product_id')
-                                                    ->where('product_to_feature.feature_id', '=', $r_incitem->id)
-                                                    ->get();
-                                            @endphp
-                                            @if (count($product_count) > 0)
-                                                {{-- @if ($count > 0) --}}
-                                                <li id="feature_dispay{{ $r_incitem->id }}" style="display: block;"><label class="check-container">{{ $r_incitem->name }} <span
-                                                            class="count" id="show-count-feature{{ $r_incitem->id }}">({{ count($product_count) }})</span>
-                                                        <input type="checkbox" class="feature_id"
-                                                            id="feature_id{{ $r_incitem->id }}"
-                                                            value="{{ $r_incitem->id }}">
-                                                        <span class="checkmark"></span>
-                                                    </label></li>
-                                                {{-- @endif --}}
-                                            @endif
-                                            @php
-                                                $i_inc++;
-                                            @endphp
-                                        @endforeach
-                                    @endif
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            @endif
-            <!-- End Feature -->
-
         </div>
 
-    </section>
+        <!-- Feature -->
+        @if (!empty($feature_inc))
+
+            @php
+                $i = 0;
+            @endphp
+            @foreach ($feature_inc as $r_inc)
+                @php
+                    $i++;
+                @endphp
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapse{{ $i }}" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapse{{ $i }}">
+                            {{ $r_inc->name }}
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapse{{ $i }}" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-heading{{ $i }}">
+                        <div class="accordion-body">
+                            <ul class="menu">
+                                @php
+                                    $feature_inc_item = DB::table('feature_selections')
+                                        ->join('features', 'feature_selections.id', 'features.feature_selection_id')
+                                        ->join('product_to_feature', 'product_to_feature.feature_id', 'features.id')
+                                        ->join('product', 'product.product_id', '=', 'product_to_feature.product_id')
+                                        ->where('features.feature_selection_id', '=', $r_inc->id)
+                                        ->where('feature_selections.category3_id', '=', $category3_id)
+                                        ->where('features.is_active', '=', 1)
+                                        ->select(
+                                            'features.id as id',
+                                            'features.name as name',
+                                            'feature_selections.id as feature_selections_id',
+                                            'product_to_feature.id as product_to_feature_id',
+                                            'product_to_feature.product_id as product_to_feature_product_id',
+                                            'product.product_id as product_id',
+                                            //DB::raw('COUNT(product.product_id) as product_count')
+                                        )
+                                        ->groupBy('features.id')
+                                        ->get();
+                                    
+                                    $i_inc = 1;
+                                    // dd($feature_inc_item);
+                                @endphp
+                                @if (!empty($feature_inc_item))
+                                    @foreach ($feature_inc_item as $r_incitem)
+                                        @php
+                                            $product_count = DB::table('product')
+                                                ->select('product_to_feature.id')
+                                                ->join('product_to_feature', 'product.product_id', '=', 'product_to_feature.product_id')
+                                                ->where('product_to_feature.feature_id', '=', $r_incitem->id)
+                                                ->get();
+                                        @endphp
+                                        @if (count($product_count) > 0)
+                                            {{-- @if ($count > 0) --}}
+                                            <li id="feature_dispay{{ $r_incitem->id }}" style="display: block;">
+                                                <label class="check-container">{{ $r_incitem->name }} <span
+                                                        class="count"
+                                                        id="show-count-feature{{ $r_incitem->id }}">({{ count($product_count) }})</span>
+                                                    <input type="checkbox" class="feature_id"
+                                                        id="feature_id_sub{{ $r_incitem->id }}"
+                                                        value="{{ $r_incitem->id }}">
+                                                    <span class="checkmark"></span>
+                                                </label></li>
+                                            {{-- @endif --}}
+                                        @endif
+                                        @php
+                                            $i_inc++;
+                                        @endphp
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+        <!-- End Feature -->
+
 </div>
 
+</section>
+</div>
 
 
 {{-- <script>
@@ -398,9 +371,12 @@
     });
 
     var color_id = '';
+    // var product_id =document.getElementById(product_id").value();
+    var pro_sun = '';
+
 
     function filterProductSub(e) {
-        
+
         color_id = e;
         // alert(color_id);
         filterProductFeatureColorSub3();
@@ -415,7 +391,7 @@
     }
 
     var feature_id = [];
-    $(".feature_id").click(function Fbrand_id() {
+    $(".feature_id").click(function() {
 
         var checked = $(this).val();
         if ($(this).is(':checked')) {
@@ -429,18 +405,20 @@
         ajaxGetFilter();
     });
 
+    
     function Ffeature_id(e) {
         var checked = $(this).data("id");
 
-        if ($(this).is(':checked')) {
-            feature_id.push(checked);
-        } else {
+        // if ($(this).is(':checked')) {
+        //     feature_id.push(checked);
+        // } else {
             let index = feature_id.indexOf(JSON.stringify(e));
             if (index > -1) { // only splice array when item is found
                 feature_id.splice(index, 1); // 2nd parameter means remove one item only
             }
-        }
-        document.getElementById("feature_id" + JSON.stringify(e)).checked = false;
+        // }
+        document.getElementById("feature_id_sub" + JSON.stringify(e)).checked = false;
+
         filterProductFeatureColorSub3();
         ajaxGetFilter();
     }
@@ -462,25 +440,25 @@
         var checked = $(this).data("id");
 
         if ($(this).is(':checked')) {
-            brand_id.push(checked);
+            brand_id.push(e);
         } else {
             let index = brand_id.indexOf(JSON.stringify(e));
             if (index > -1) { // only splice array when item is found
                 brand_id.splice(index, 1); // 2nd parameter means remove one item only
             }
         }
-        document.getElementById("brand_id" + JSON.stringify(e)).checked = false;
+        document.getElementById("brand_id_sub" + JSON.stringify(e)).checked = false;
         filterProductFeatureColorSub3();
         ajaxGetFilter();
     }
 
-  
+
     function fprice_range() {
         // alert('15561');
         $(".price-min").val('0'),
-        $(".price-max").val('10000'),
-        // document.getElementById("feature_id" + JSON.stringify(e)).checked = false;
-        filterProductFeatureColorSub3();
+            $(".price-max").val('10000'),
+            // document.getElementById("feature_id" + JSON.stringify(e)).checked = false;
+            filterProductFeatureColorSub3();
         ajaxGetFilter();
     }
 
@@ -527,6 +505,8 @@
             $(".span_no2").html(data_split[3]);
             $(".span_total").html(data_split[4]);
             // console.log(data_split);
+            pro_sun = $(".pro_sun").val();
+            ajaxGetFilterBrand(pro_sun)
         });
     }
 
@@ -547,6 +527,93 @@
             $(".filterselect").html(data);
         });
 
+        // $.post('{{ url('ajaxGetFilterBrand') }}', {
+        //     category3_id: $("#category3_id").val(),
+        //     brand_id: brand_id,
+        //     color_id: color_id,
+        //     price_min: $(".price-min").val(),
+        //     price_max: $(".price-max").val(),
+        //     order_by: order_by,
+        //     feature_id: feature_id,
+        //     page: page,
+        //     pro_sun: pro_sun,
+        //     "_token": "{{ csrf_token() }}"
+        // }, function(data) {
+        //     console.log(data); 
+        //     data.brand.forEach(function (value) {
+        //         $("#show-count-brand"+value.brand_id).html('('+value.count+')');
+        //         $("#show-count-brand_index"+value.brand_id).html('('+value.count+')');
+        //         var myEle = document.getElementById("brand_dispay" + value.brand_id);
+        //         if (myEle) {
+        //             if (value.count == 0) {
+        //                 console.log(value.brand_id);
+        //                 document.getElementById("brand_dispay" + value.brand_id).style.display = 'none';
+        //                 document.getElementById("brand_dispay_index" + value.brand_id).style.display = 'none';
+
+        //             } else {
+        //                 document.getElementById("brand_dispay" + value.brand_id).style.display =
+        //                 "block";
+        //                 document.getElementById("brand_dispay_index" + value.brand_id).style.display =
+        //                 "block";
+        //             }
+        //         }
+        //     })
+        //     data.color.forEach(function (value) {
+        //         $("#show-count-color"+value.color_id).html('('+value.count+')');
+        //         $("#show-count-color_index"+value.color_id).html('('+value.count+')');
+        //         var myElecolor = document.getElementById("color_dispay" + value.brand_id);
+        //         if (myElecolor) {
+        //             if (value.count == 0) {
+        //                 console.log(value.color_id);
+        //                 document.getElementById("color_dispay" + value.color_id).style.display = 'none';
+        //                 document.getElementById("color_dispay_index" + value.color_id).style.display = 'none';
+        //             } else {
+        //                 document.getElementById("color_dispay" + value.color_id).style.display =
+        //                 "block";
+        //                 document.getElementById("color_dispay_index" + value.color_id).style.display =
+        //                 "block";
+        //             }
+        //         }
+        //     })
+        //     data.feature.forEach(function (value) {
+        //         $("#show-count-feature"+value.id).html('('+value.count+')');
+        //         $("#show-count-feature_index"+value.id).html('('+value.count+')');
+        //         var myElefeature = document.getElementById("feature_dispay" + value.id);
+        //         if (myElefeature) {
+        //             if (value.count == 0) {
+        //                 console.log(value.brand_id);
+        //                 document.getElementById("feature_dispay" + value.id).style.display = 'none';
+        //                 document.getElementById("feature_dispay_index" + value.id).style.display = 'none';
+        //             } else {
+        //                 document.getElementById("feature_dispay" + value.id).style.display =
+        //                 "block";
+        //                 document.getElementById("feature_dispay_index" + value.id).style.display =
+        //                 "block";
+        //             }
+        //         }
+        //     })
+
+        //     // console.log(data.category3);
+        //     // data.category3.forEach(function(value) {
+        //     //     $("#show-count-category" + value.category3_id).html('(' + value.count + ')');
+        //     //     var myElecategory = document.getElementById("category_dispay" + value.category3_id);
+        //     //     if (myElecategory) {
+        //     //         if (value.count == 0) {
+        //     //             console.log(value.category3_id);
+        //     //             document.getElementById("category_dispay" + value.category3_id).style.display = 'none';
+        //     //         } else {
+        //     //             document.getElementById("category_dispay" + value.category3_id).style.display =
+        //     //             "block";
+        //     //         }
+        //     //     }
+        //     // })
+
+        //     // $(".filterselectbrand").html(data);
+        // });
+    }
+
+
+    function ajaxGetFilterBrand(pro_sun) {
         $.post('{{ url('ajaxGetFilterBrand') }}', {
             category3_id: $("#category3_id").val(),
             brand_id: brand_id,
@@ -556,50 +623,65 @@
             order_by: order_by,
             feature_id: feature_id,
             page: page,
+            pro_sun: pro_sun,
             "_token": "{{ csrf_token() }}"
         }, function(data) {
-            console.log(data);
-            data.brand.forEach(function (value) {
-                $("#show-count-brand"+value.brand_id).html('('+value.count+')');
+          
+            data.brand.forEach(function(value) {
+                $("#show-count-brand" + value.brand_id).html('(' + value.count + ')');
+                $("#show-count-brand_index" + value.brand_id).html('(' + value.count + ')');
                 var myEle = document.getElementById("brand_dispay" + value.brand_id);
                 if (myEle) {
                     if (value.count == 0) {
-                        console.log(value.brand_id);
+                        
                         document.getElementById("brand_dispay" + value.brand_id).style.display = 'none';
+                        document.getElementById("brand_dispay_index" + value.brand_id).style.display =
+                            'none';
+
                     } else {
                         document.getElementById("brand_dispay" + value.brand_id).style.display =
-                        "block";
+                            "block";
+                        document.getElementById("brand_dispay_index" + value.brand_id).style.display =
+                            "block";
                     }
                 }
             })
-            data.color.forEach(function (value) {
-                $("#show-count-color"+value.color_id).html('('+value.count+')');
+            data.color.forEach(function(value) {
+                $("#show-count-color" + value.color_id).html('(' + value.count + ')');
+                $("#show-count-color_index" + value.color_id).html('(' + value.count + ')');
                 var myElecolor = document.getElementById("color_dispay" + value.brand_id);
                 if (myElecolor) {
                     if (value.count == 0) {
-                        console.log(value.color_id);
                         document.getElementById("color_dispay" + value.color_id).style.display = 'none';
+                        document.getElementById("color_dispay_index" + value.color_id).style.display =
+                            'none';
                     } else {
                         document.getElementById("color_dispay" + value.color_id).style.display =
-                        "block";
+                            "block";
+                        document.getElementById("color_dispay_index" + value.color_id).style.display =
+                            "block";
                     }
                 }
             })
-            data.feature.forEach(function (value) {
-                $("#show-count-feature"+value.id).html('('+value.count+')');
+            data.feature.forEach(function(value) {
+                $("#show-count-feature" + value.id).html('(' + value.count + ')');
+                $("#show-count-feature_index" + value.id).html('(' + value.count + ')');
                 var myElefeature = document.getElementById("feature_dispay" + value.id);
                 if (myElefeature) {
                     if (value.count == 0) {
-                        console.log(value.brand_id);
                         document.getElementById("feature_dispay" + value.id).style.display = 'none';
+                        document.getElementById("feature_dispay_index" + value.id).style.display =
+                            'none';
                     } else {
                         document.getElementById("feature_dispay" + value.id).style.display =
-                        "block";
+                            "block";
+                        document.getElementById("feature_dispay_index" + value.id).style.display =
+                            "block";
                     }
                 }
             })
-            
-            // $(".filterselectbrand").html(data);
+
+
         });
     }
 </script>

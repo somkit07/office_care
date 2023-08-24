@@ -66,6 +66,8 @@ class ImportExcelController extends Controller implements HasImagesContract
 
 
                 $i = 0;
+
+                $error = false;
                 foreach($data as $val) {
                 	if($i > 0) {
                 		$j = 0;
@@ -78,15 +80,57 @@ class ImportExcelController extends Controller implements HasImagesContract
                 			}
 
                 			if($j == 1) {
-                				$data_excel['product.category3_id'] = $val_;
+                                $check_category3_id = DB::table('category3')
+                                    ->where('category3_id', '=', $val_)
+                                    ->first();
+
+                                // dd($check_category3_id);
+
+                                if(!empty($check_category3_id)) {
+                                    $data_excel['product.category3_id'] = $val_;
+                                } else {
+                                    if($val_ != '') {
+                                        $error = true;
+
+                                        echo 'Error: ไม่มีรหัสหมวดหมู่ Id: '.$val_;
+                                        exit;
+                                    }
+                                }
                 			}
 
                 			if($j == 2) {
-                				$data_excel['product.brand_id'] = $val_;
+                                $check_brand_id = DB::table('brand')
+                                    ->where('brand_id', '=', $val_)
+                                    ->first();
+
+                                if(!empty($check_brand_id)) {
+                                    $data_excel['product.brand_id'] = $val_;
+                                } else {
+                                    if($val_ != '') {
+                                        $error = true;
+
+                                        echo 'Error: ไม่มีรหัส Brand Id: '.$val_;
+                                        exit;
+                                    }
+                                }
                 			}
 
                 			if($j == 3) {
-                				$data_excel['product.color_id'] = $val_;
+                                $check_color_id = DB::table('color')
+                                    ->where('color_id', '=', $val_)
+                                    ->first();
+
+                                if(!empty($check_color_id)) {
+                                    $data_excel['product.color_id'] = $val_;
+                                } else {
+                                    if($val_ != '') {
+                                        $error = true;
+
+                                        echo 'Error: ไม่มีรหัส Color Id: '.$val_;
+                                        exit;
+                                    }
+                                }
+                				
                 			}
 
                 			if($j == 4) {
@@ -118,8 +162,10 @@ class ImportExcelController extends Controller implements HasImagesContract
                                 $data_excel['product_datetime_create'] = date('Y-m-d H:i:s');
                                 $data_excel['product_datetime_update'] = date('Y-m-d H:i:s');
 
-                                DB::table('product')
-                                    ->insert($data_excel);
+                                if($val_ != '') {
+                                    DB::table('product')
+                                        ->insert($data_excel);
+                                }
                 			}
 
                 			$j++;
@@ -135,7 +181,9 @@ class ImportExcelController extends Controller implements HasImagesContract
             echo '<script>alert("นามสกุลไฟล์ต้องเป็น .xlsx เท่านั้น");window.location.href="'.url('backend/import_excel').'";</script>';
         }
 
-        return redirect(url('backend/import_excel'));
+        if($error == false) {
+            return redirect(url('backend/import_excel'));
+        }
     }
     // end import_excel
 }

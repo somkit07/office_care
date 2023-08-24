@@ -14,6 +14,10 @@
         <td>{{ $order->order_shipping_address_mobile}}</td>
     </tr>
     <tr>
+        <th align="left">Company</th>
+        <td>{{ $order->order_shipping_address_company}}</td>
+    </tr>
+    <tr>
         <th align="left">Address</th>
         <td>
 @php

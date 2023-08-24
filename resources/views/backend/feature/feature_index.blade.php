@@ -35,7 +35,7 @@
                     <input type="hidden" id="fselection_id" name="fselection_id" value="">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Category 3</label>
-						<select name="category3_id" id="category3_id" class="form-control" required>
+						<select name="category3_id" id="category3_id" class="form-select select2" required>
 							<option value="">Please Select</option>
 							@if(!empty($category3))
 								@foreach($category3 as $r)
@@ -61,8 +61,16 @@
 @endsection
 
 @section('script_footer')
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
 	$(document).ready(function() {
+		$('.select2').select2();
+		$("#category3_id").select2({
+            dropdownParent: $('#featureSectionModal .modal-content')
+        });
 		App.init();
 		//TableManageDefault.init();
 		

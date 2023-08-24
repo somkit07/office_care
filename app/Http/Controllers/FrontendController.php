@@ -351,7 +351,7 @@ class FrontendController extends Controller implements HasImagesContract
             redirect('index');
         }
 
-        //dd(Session::all());
+        // dd(ShoppingCart::all());
 
         Alert::success('Success Title', 'Success Message');
 
@@ -417,9 +417,12 @@ class FrontendController extends Controller implements HasImagesContract
             'quotation_contact' => $request->input('quotation_contact'),
             'quotation_tel' => $request->input('quotation_tel'),
             'quotation_email' => $request->input('quotation_email'),
-            'quotation_message' => $request->input('quotation_message'),
             'quotation_datetime_create' => date('Y-m-d H:i:s')
         );
+
+        if(!empty($request->input('quotation_message'))) {
+            $data_post['quotation_message'] = $request->input('quotation_message');
+        }
 
         DB::table('quotation')
             ->insert($data_post);
@@ -830,7 +833,7 @@ class FrontendController extends Controller implements HasImagesContract
                                                 </div>
                                                 <div class="row text-end">
                                                     <div class="col-lg-2 offset-lg-8">
-                                                    <a href="javascript:removeCart('<?php echo $r->rawId();?>');" onclick="return confirm('Confirm Delete');" class="smlink">Remove</a>
+                                                    <a href="javascript:removeCart('<?php echo $r->rawId();?>');" onclick="return confirm('Confirm Delete');" class="trashr"><i class="fi fi-rr-trash"></i></a>
                                                     </div>
                                                     <div class="col-lg-2">
                                                     <div class="qtyCart">
@@ -1084,9 +1087,9 @@ class FrontendController extends Controller implements HasImagesContract
             // ->select('feature_selections.id','feature_selections.name','category3.category3_id')
             ->where('feature_selections.is_active', 1)
             ->where('category3.category2_id', '=', $category2_id)
-            ->groupBy('category3.category3_id')
+            ->groupBy('name')
             ->get();
-            // dd($data['feature_inc'],$category2_id);
+            // dd($data['feature_inc']);
             
         // product
         $perpage = 36;
@@ -1238,6 +1241,17 @@ class FrontendController extends Controller implements HasImagesContract
             ->where('member_email', '=', $request->input('member_email'))
             ->first();
 
+        $member_token = md5(rand());
+
+        $data_member = array(
+            'member_token' => $member_token,
+            'member_datetime_update' => date('Y-m-d H:i:s')
+        );
+
+        DB::table('member')
+            ->where('member_email', '=', $request->input('member_email'))
+            ->update($data_member);
+
         if(empty($checkEmail)) {
             echo 'ไม่มีอีเมล์นี้ในระบบ';
         } else {
@@ -1248,16 +1262,37 @@ class FrontendController extends Controller implements HasImagesContract
                 $from_email = 'noreply.officecare@gmail.com';
                 $from_name = 'NoReply Officecare';
 
+                $data['member_name'] = $checkEmail->member_name;
+                $data['member_surname'] = $checkEmail->member_surname;
                 $data['member_password'] = $checkEmail->member_password;
+                $data['member_email'] = $checkEmail->member_email;
+                $data['member_token'] = $member_token;
 
                 Mail::send('mail.forget_password', $data, function($message)use($sender, $subject) {
                     $message->to($sender[0])
                             ->subject($subject);
                 });
 
-                echo 'ส่งรหัสผ่านของคุณเรียบร้อย';
+                echo 'true';
             }
         }
+    }
+
+    public function forget_password($member_token) {
+        $data['member_token'] = $member_token;
+
+        return view('frontend/forget_password', $data);
+    }
+
+    public function ajaxForgetPassword(Request $request) {
+        $data_password = array(
+            'member_password' => $request->input('member_password'),
+            'member_datetime_update' => date('Y-m-d H:i:s')
+        );
+        
+        DB::table('member')
+            ->where('member_token', '=', $request->input('member_token'))
+            ->update($data_password);
     }
 
     public function saveMember(Request $request) {
@@ -1397,6 +1432,7 @@ class FrontendController extends Controller implements HasImagesContract
                 ->first();
 
             if(!empty($member_address)) {
+                $data['order_shipping_address_company'] = $member_address->member_shipping_address_company;
                 $data['order_shipping_address_name_surname'] = $member_address->member_shipping_address_name_surname;
                 $data['order_shipping_address_mobile'] = $member_address->member_shipping_address_mobile;
                 $data['order_shipping_address_address'] = $member_address->member_shipping_address_address;
@@ -1406,6 +1442,7 @@ class FrontendController extends Controller implements HasImagesContract
                 $data['order_shipping_address_postcode'] = $member_address->member_shipping_address_postcode;
             }
         } elseif($request->input('type') == 'new_address') {
+            $data['order_shipping_address_company'] = $request->input('order_shipping_address_company');
             $data['order_shipping_address_name_surname'] = $request->input('order_shipping_address_name_surname');
             $data['order_shipping_address_mobile'] = $request->input('order_shipping_address_mobile');
             $data['order_shipping_address_address'] = $request->input('order_shipping_address_address');
@@ -1476,6 +1513,35 @@ class FrontendController extends Controller implements HasImagesContract
 
             echo $order->order_id;
         }
+    }
+
+    public function ajaxSaveAddressData(Request $request) {
+        $data_member_shipping_address = array(
+            'member_shipping_address_status' => 'ตั้งเป็นค่าเริ่มต้น',
+            'member_shipping_address_datetime_update' => date('Y-m-d H:i:s')
+        );
+
+        DB::table('member_shipping_address')
+            ->where('member_id', '=', Session::get('member_id'))
+            ->update($data_member_shipping_address);
+
+        $data_shipping_address = array(
+            'member_id' => Session::get('member_id'),
+            'member_shipping_address_company' => $request->input('order_shipping_address_company'),
+            'member_shipping_address_name_surname' => $request->input('order_shipping_address_name_surname'),
+            'member_shipping_address_mobile' => $request->input('order_shipping_address_mobile'),
+            'member_shipping_address_address' => $request->input('order_shipping_address_address'),
+            'province_id' => $request->input('province_id'),
+            'amphur_id' => $request->input('amphur_id'),
+            'tumbol_id' => $request->input('tumbol_id'),
+            'member_shipping_address_status' => 'ค่าเริ่มต้น',
+            'member_shipping_address_postcode' => $request->input('order_shipping_address_postcode'),
+            'member_shipping_address_datetime_create' => date('Y-m-d H:i:s'),
+            'member_shipping_address_datetime_update' => date('Y-m-d H:i:s')
+        );
+
+        DB::table('member_shipping_address')
+            ->insert($data_shipping_address);
     }
 
     public function search(Request $request, $keyword) {
@@ -1892,10 +1958,13 @@ class FrontendController extends Controller implements HasImagesContract
             $product = $product->get();
         }
 
+                $product_id=[];
         // product
         if(!empty($product)) {
+           
             foreach($product as $r) {
-?>
+                $product_id[] = $r->product_id;
+                            ?>
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="productgroup">
                                     <div class="productpic">
@@ -1930,11 +1999,11 @@ class FrontendController extends Controller implements HasImagesContract
                                         <?php if($r->product_before_discount != $r->product_price){?>
                                         
                                                 <div class="pt-3 price">
-                                                ฿ <?php echo number_format($r->product_price, 0, '.', ',');?> <?php echo checkPrice($r->product_before_discount, $r->product_price);?>
+                                                ฿ <?php echo number_format($r->product_price, 2);?> <?php echo checkPrice($r->product_before_discount, $r->product_price);?>
                                                 </div>
                                         <?php } else { ?>
                                                 <div class="pt-3 priceoriginal">
-                                                    ฿ <?php echo number_format($r->product_price, 0, '.', ',');?>
+                                                    ฿ <?php echo number_format($r->product_price, 2);?>
                                                 </div>   
                                         <?php } ?>
                                         <a href="<?php echo url('product_detail/' . $r->product_id) ?>"
@@ -1948,6 +2017,10 @@ class FrontendController extends Controller implements HasImagesContract
             }
         }
 
+        $product_id = implode(', ', $product_id);
+        ?>
+        <input type="hidden" class="pro_sun" id="pro_sun" name="pro_sun" value="<?php echo $product_id ?>">
+        <?php
         echo '!@#$%^&*()_+';
 
         $page = ceil(count($data['product_all']) / $perpage);
@@ -2310,11 +2383,11 @@ class FrontendController extends Controller implements HasImagesContract
                                         <?php if($r->product_before_discount != $r->product_price){?>
                                         
                                             <div class="pt-3 price">
-                                            ฿ <?php echo number_format($r->product_price, 0, '.', ',');?> <?php echo checkPrice($r->product_before_discount, $r->product_price);?>
+                                            ฿ <?php echo number_format($r->product_price, 2);?> <?php echo checkPrice($r->product_before_discount, $r->product_price);?>
                                             </div>
                                         <?php } else { ?>
                                                 <div class="pt-3 priceoriginal">
-                                                    ฿ <?php echo number_format($r->product_price, 0, '.', ',');?>
+                                                    ฿ <?php echo number_format($r->product_price, 2);?>
                                                 </div>   
                                         <?php } ?>
                                         <a href="<?php echo url('product_detail/' . $r->product_id) ?>"
@@ -2438,7 +2511,7 @@ class FrontendController extends Controller implements HasImagesContract
                 ->whereIn('features.id', $request->input('feature_id'));
             }
                
-            }
+        }
 
         $data['product_all']->groupBy('product.product_id');
 
@@ -2656,10 +2729,15 @@ class FrontendController extends Controller implements HasImagesContract
 
             $product = $product->get();
         }
-
+ $product_id=[];
         // product
+        foreach($data['product_all'] as $r) {
+            $product_id[] = $r->product_id;
+        }
         if(!empty($product)) {
+           
             foreach($product as $r) {
+                // $product_id[] = $r->product_id;
 ?>
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="productgroup">
@@ -2695,11 +2773,11 @@ class FrontendController extends Controller implements HasImagesContract
                                         <?php if($r->product_before_discount != $r->product_price){?>
                                         
                                                 <div class="pt-3 price">
-                                                ฿ <?php echo number_format($r->product_price, 0, '.', ',');?> <?php echo checkPrice($r->product_before_discount, $r->product_price);?>
+                                                ฿ <?php echo number_format($r->product_price, 2);?> <?php echo checkPrice($r->product_before_discount, $r->product_price);?>
                                                 </div>
                                         <?php } else { ?>
                                                 <div class="pt-3 priceoriginal">
-                                                    ฿ <?php echo number_format($r->product_price, 0, '.', ',');?>
+                                                    ฿ <?php echo number_format($r->product_price, 2);?>
                                                 </div>   
                                         <?php } ?>
                                         <a href="<?php echo url('product_detail/' . $r->product_id) ?>"
@@ -2712,6 +2790,10 @@ class FrontendController extends Controller implements HasImagesContract
 <?php
             }
         }
+        $product_id = implode(', ', $product_id);
+        ?>
+        <input type="hidden" class="pro_sun" id="pro_sun" name="pro_sun" value="<?php echo $product_id ?>">
+        <?php
         echo '!@#$%^&*()_+';
 
         $page = ceil(count($data['product_all']) / $perpage);
@@ -2752,6 +2834,9 @@ class FrontendController extends Controller implements HasImagesContract
 
         echo $count_product_all;
         // echo  $count_product_all = count($product);
+        // dd($product_id);
+        
+        
     }
 
     public function ajaxSavePdf(Request $request) {
@@ -2768,6 +2853,7 @@ class FrontendController extends Controller implements HasImagesContract
 
             if(!empty($member)) {
                 $data_address = array(
+                    'member_shipping_address_company' => $member->member_shipping_address_company,
                     'member_shipping_address_name_surname' => $member->member_shipping_address_name_surname,
                     'member_shipping_address_mobile' => $member->member_shipping_address_mobile,
                     'member_shipping_address_address' => $member->member_shipping_address_address,
@@ -2868,18 +2954,50 @@ class FrontendController extends Controller implements HasImagesContract
     public function ajaxGetFilterBrand(Request $request) {
 
         $array=[];
+        $array_feature = [];
+        $cc = array();
+        $feature_selection_id = null;
+        $brand_id = (is_null($request->brand_id)) ? 0 : count($request->brand_id) ;
+        $color_id = (is_null($request->color_id)) ? 0 : count($request->color_id) ;
+        $feature_id = (is_null($request->feature_id)) ? 0 : count($request->feature_id) ;
+        $category3_id = (is_null($request->category3_id)) ? 0 : 1 ;
+
+        $pro_sun = explode(",", $request->pro_sun);
+        
         if(!empty($request->input('feature_id'))) {
             $features = DB::table('product_to_feature')->select('product_id')
             ->whereIn('feature_id', $request->feature_id)
+            ->groupBy('product_id')
             ->get();
             foreach ($features as $key => $value) {
                 $array[] = $value->product_id;
             }
+
+            $features1 = DB::table('features')->select('feature_selection_id')
+            ->whereIn('id', $request->feature_id)
+            ->get();
+            foreach ($features1 as $key => $value) {
+                $array_feature[] = $value->feature_selection_id;
+            }
+            $countValues = array_count_values($array_feature);
+
+            // คัดเลือกค่าที่มีจำนวนการปรากฏมากกว่า 1 ครั้ง
+            $duplicates = array_filter($countValues, function($count) {
+                return $count > 1;
+            });
+
+            // แสดงผลค่าที่ซ้ำ
+            $feature_selection_id = array_keys($duplicates);
+
+            
         }
+        // dd($array);
+
         
-        $brand_inc2 = DB::table('brand')
-        ->orderBy('brand_id', 'asc')
-        ->get();
+        
+
+
+        $brand_inc2 = DB::table('brand')->orderBy('brand_id', 'asc')->get();
             foreach ($brand_inc2 as $key => $r_inc) {
                 $count = DB::table('product')
                     ->where('product.brand_id', '=', $r_inc->brand_id);
@@ -2892,13 +3010,22 @@ class FrontendController extends Controller implements HasImagesContract
                 if(!empty($request->input('feature_id'))) {
                     $count->whereIn('product.product_id', $array);
                 }
-                $count = $count->count();
+                if ($brand_id>1 or $brand_id == 0) {
+                    $count = $count->count();
+                } else {
+                    if (in_array($r_inc->brand_id, $request->brand_id)) {
+                        $count = count($pro_sun);
+                    } else {
+                        $count = $count->count();
+                    }
+                }
+                
+              
+                
                 $r_inc->count = $count;
             }
         
-        $color = DB::table('color')
-        ->where('color_id', $request->color_id)
-        ->get();
+        $color = DB::table('color')->where('color_id', $request->color_id)->get();
             foreach ($color as $key => $c_l) {
                 $count_color = DB::table('product')
                     ->where('product.color_id', '=', $c_l->color_id);
@@ -2911,58 +3038,128 @@ class FrontendController extends Controller implements HasImagesContract
                 if(!empty($request->input('feature_id'))) {
                     $count_color->whereIn('product.product_id', $array);
                 }
+
+                if ($color_id>1 or $color_id == 0) {
                     $count_color = $count_color->count();
+                } else {
+                    if (in_array($c_l->color_id, $request->color_id)) {
+                        $count_color = count($pro_sun);
+                    } else {
+                        $count_color = $count_color->count();
+                    }
+                }
+                
+                
+                // $count_color->whereIn('product.product_id', $pro_sun);
+                    // $count_color = $count_color->count();
                     
                     $c_l->count = $count_color;
             }
 
-           
-        // $feature_inc= DB::table('category1')
-        // ->join('category2', 'category1.category1_id', '=', 'category2.category1_id')
-        // ->join('category3', 'category2.category2_id', '=', 'category3.category2_id')
-        // ->join('product', 'category3.category3_id', '=', 'product.category3_id')
-        // ->join('brand', 'product.brand_id', '=', 'brand.brand_id')
-        // ->join('feature_selections', 'category3.category3_id', '=', 'feature_selections.category3_id')
-        // ->where('category3.category3_id', '=', $request->category3_id)
-        // ->groupBy('id')
-        // ->orderBy('id', 'asc')
-        // ->get();
-        //     foreach ($feature_inc as $r_inc) {
-                $feature_inc_item = DB::table('feature_selections')
-                ->join('features', 'feature_selections.id', 'features.feature_selection_id')
-                ->join('product_to_feature', 'product_to_feature.feature_id', 'features.id')
-                ->join('product', 'product.product_id', '=', 'product_to_feature.product_id')
-                // ->where('features.feature_selection_id', '=', $r_inc->id)
-                ->where('feature_selections.category3_id', '=', $request->category3_id)
-                ->where('features.is_active', '=', 1)
-                ->select(
-                'features.id as id',
-                'features.name as name',
-                'feature_selections.id as feature_selections_id',
-                'product_to_feature.id as product_to_feature_id',
-                'product_to_feature.product_id as product_to_feature_product_id',
-                'product.product_id as product_id'
-                )
-                ->groupBy('features.id')
-                ->get();
-                foreach ($feature_inc_item as $r_incitem) {
+            
+        
+        $feature_inc_item = DB::table('feature_selections')
+            ->join('features', 'feature_selections.id', 'features.feature_selection_id')
+            ->join('product_to_feature', 'product_to_feature.feature_id', 'features.id')
+            ->join('product', 'product.product_id', '=', 'product_to_feature.product_id')
+            ->select('features.id','features.feature_selection_id')
+            ->where('features.is_active', '=', 1)
+
+            // if(!empty($request->input('category3_id'))) {
+                ->where('feature_selections.category3_id', $request->category3_id)
+            // }
+            // if(!empty($request->input('category2_id'))) {
+            //     $feature_inc_item->where('feature_selections.category2_id', '=', $request->category2_id);
+            // }
+            
+            ->groupBy('features.id')->get();
+            // dd($feature_inc_item);
+            foreach ($feature_inc_item as $r_incitem) {
+                // dd($r_incitem->feature_selection_id);
                     $product_count = DB::table('product')
-                    ->select('product_to_feature.id')
                     ->join('product_to_feature', 'product.product_id', '=', 'product_to_feature.product_id')
+                    // ->join('features', 'product_to_feature.feature_id', '=', 'features.id')
                     ->where('product_to_feature.feature_id', '=', $r_incitem->id);
                     if(!empty($request->input('brand_id'))) {
-                        $product_count->where('product.brand_id', $request->brand_id);
+                        $product_count->whereIn('product.brand_id', $request->brand_id);
                     }
                     if(!empty($request->input('color_id'))) {
                         $product_count->where('product.color_id', $request->color_id);
                     }
-                    $product_count = $product_count->count();
+
+                    if ($feature_id == 1) {
+                        $f_s_id = DB::table('features')->whereIn('id', $request->feature_id)
+                        ->first();
+                        if ($f_s_id->feature_selection_id == $r_incitem->feature_selection_id) {
+                            
+                        } else {
+                            if(!empty($request->input('feature_id'))) {
+                                $product_count->whereIn('product.product_id', $array);
+                            }
+                        }
+                    } else {
+
+                        if (!is_null($feature_selection_id) && count($feature_selection_id) > 0) {
+                            if (in_array($r_incitem->feature_selection_id, $feature_selection_id)) {
+                               
+                            } else {
+                                if(!empty($request->input('feature_id'))) {
+                                    $product_count->whereIn('product.product_id', $array);
+                                }
+                            }
+                        } else {
+                            if(!empty($request->input('feature_id'))) {
+                                $product_count->whereIn('product.product_id', $array);
+                            }
+                        }
+                        
+                    }
                     
+                    
+
+                    if ($feature_id<1 or $feature_id == 0) {
+                        $product_count = $product_count->count();
+                    } else {
+                        
+                        if (in_array($r_incitem->id, $request->feature_id)) {
+                            if (!is_null($feature_selection_id) && count($feature_selection_id) > 0) {
+                                if (in_array($r_incitem->feature_selection_id, $feature_selection_id)) {
+                                    $product_count->whereIn('product.product_id', $pro_sun);
+                                    $product_count = $product_count->count();
+                                } else {
+                                    $product_count->whereIn('product.product_id', $pro_sun);
+                                    $product_count = $product_count->count();
+                                }
+                            } else {
+                                $product_count->whereIn('product.product_id', $pro_sun);
+                                    $product_count = $product_count->count();
+                                // dd($r_incitem->id);
+                            }
+                            
+                        } else {
+                            // $product_count->whereIn('product.product_id', $pro_sun);
+                            $product_count = $product_count->count();
+                        }
+                    }
+                    
+                    // if ($feature_id == 1) {
+
+                    //     if ($product_count == 0) {
+                            
+                    //         $product_count = 1;
+                    //     } else {
+                    //         $product_count = $product_count;
+                    //     }
+                        
+                        
+                    // } else {
+                    //     $product_count = $product_count;
+                    // }
                     $r_incitem->count = $product_count;
 
                 }
 
-            // }
+            
             $category3 =[];
              $category_txt_inc = DB::table('category1')
                                 ->join('category2', 'category1.category1_id', '=', 'category2.category1_id')
@@ -2987,7 +3184,21 @@ class FrontendController extends Controller implements HasImagesContract
                                 if(!empty($request->input('color_id'))) {
                                     $count3->where('product.color_id', $request->color_id);
                                 }
-                                $count3 = $count3->count();
+                                if(!empty($request->input('feature_id'))) {
+                                    $count3->whereIn('product.product_id', $array);
+                                }
+
+                                if ($category3_id>1 or $category3_id == 0) {
+                                    $count3 = $count3->count();
+                                } else {
+                                    if (in_array($cat3->category3_id, $request->category3_id)) {
+                                        $count3 = count($pro_sun);
+                                    } else {
+                                        $count3 = $count3->count();
+                                    }
+                                }
+                                // $count3->whereIn('product.product_id', $pro_sun);
+                                // $count3 = $count3->count();
                                 $cat3->count = $count3;
             
                             }
@@ -3003,7 +3214,225 @@ class FrontendController extends Controller implements HasImagesContract
             'feature'=> $feature_inc_item,
             'category3'=> $category3,
         ]);
-    }           
+    }  
+    
+    public function ajaxGetFilterBrandproduct(Request $request) {
+
+        $array=[];
+        $array_feature = [];
+        $cc = array();
+        $feature_selection_id = null;
+        $brand_id = (is_null($request->brand_id)) ? 0 : count($request->brand_id) ;
+        $feature_id = (is_null($request->feature_id)) ? 0 : count($request->feature_id) ;
+        $category3_id = (is_null($request->category3_id)) ? 0 : count($request->category3_id) ;
+
+        $pro_sun = explode(",", $request->pro_sun);
+        
+        if(!empty($request->input('feature_id'))) {
+            $features = DB::table('product_to_feature')->select('product_id')
+            ->whereIn('feature_id', $request->feature_id)
+            ->groupBy('product_id')
+            ->get();
+            foreach ($features as $key => $value) {
+                $array[] = $value->product_id;
+            }
+
+            $features1 = DB::table('features')->select('feature_selection_id')
+            ->whereIn('id', $request->feature_id)
+            ->get();
+            foreach ($features1 as $key => $value) {
+                $array_feature[] = $value->feature_selection_id;
+            }
+            $countValues = array_count_values($array_feature);
+
+            // คัดเลือกค่าที่มีจำนวนการปรากฏมากกว่า 1 ครั้ง
+            $duplicates = array_filter($countValues, function($count) {
+                return $count > 1;
+            });
+
+            // แสดงผลค่าที่ซ้ำ
+            $feature_selection_id = array_keys($duplicates);
+
+            
+        }
+
+        $brand_inc2 = DB::table('brand')->orderBy('brand_id', 'asc')->get();
+            foreach ($brand_inc2 as $key => $r_inc) {
+                $count = DB::table('product')
+                    ->where('product.brand_id', '=', $r_inc->brand_id);
+                if(!empty($request->input('category3_id'))) {
+                    $count->where('product.category3_id', $request->category3_id);
+                }
+                // if(!empty($request->input('color_id'))) {
+                //     $count->where('product.color_id', $request->color_id);
+                // }
+                if(!empty($request->input('feature_id'))) {
+                    $count->whereIn('product.product_id', $array);
+                }
+                if ($brand_id>1 or $brand_id == 0) {
+                    $count = $count->count();
+                } else {
+                    if (in_array($r_inc->brand_id, $request->brand_id)) {
+                        $count = count($pro_sun);
+                    } else {
+                        $count = $count->count();
+                    }
+                }
+                $r_inc->count = $count;
+            }
+        
+        // $color = DB::table('color')->where('color_id', $request->color_id)->get();
+            // foreach ($color as $key => $c_l) {
+            //     $count_color = DB::table('product')
+            //         ->where('product.color_id', '=', $c_l->color_id);
+            //     if(!empty($request->input('category3_id'))) {
+            //         $count_color->whereIn('product.category3_id', $request->category3_id);
+            //     }
+            //     if(!empty($request->input('brand_id'))) {
+            //         $count_color->where('product.brand_id', $request->brand_id);
+            //     }
+            //     if(!empty($request->input('feature_id'))) {
+            //         $count_color->whereIn('product.product_id', $array);
+            //     }
+
+            //     if ($color_id>1 or $color_id == 0) {
+            //         $count_color = $count_color->count();
+            //     } else {
+            //         if (in_array($c_l->color_id, $request->color_id)) {
+            //             $count_color = count($pro_sun);
+            //         } else {
+            //             $count_color = $count_color->count();
+            //         }
+            //     }
+            //     $c_l->count = $count_color;
+            // }
+
+           
+        
+        $feature_inc_item = DB::table('feature_selections')
+            ->join('features', 'feature_selections.id', 'features.feature_selection_id')
+            ->join('product_to_feature', 'product_to_feature.feature_id', 'features.id')
+            ->join('product', 'product.product_id', '=', 'product_to_feature.product_id')
+            ->select('features.id','features.feature_selection_id')
+            ->where('features.is_active', '=', 1)
+            ->where('feature_selections.category3_id', $request->category3_id)
+            ->where('feature_selections.category2_id', '=', $request->category2_id)
+            ->groupBy('features.id')->get();
+           
+            foreach ($feature_inc_item as $r_incitem) {
+                    $product_count = DB::table('product')
+                    ->join('product_to_feature', 'product.product_id', '=', 'product_to_feature.product_id')
+                    ->where('product_to_feature.feature_id', '=', $r_incitem->id);
+                    if(!empty($request->input('brand_id'))) {
+                        $product_count->whereIn('product.brand_id', $request->brand_id);
+                    }
+                    if(!empty($request->input('color_id'))) {
+                        $product_count->where('product.color_id', $request->color_id);
+                    }
+
+                    if ($feature_id == 1) {
+                        $f_s_id = DB::table('features')->whereIn('id', $request->feature_id)
+                        ->first();
+                        if ($f_s_id->feature_selection_id == $r_incitem->feature_selection_id) {
+                            
+                        } else {
+                            if(!empty($request->input('feature_id'))) {
+                                $product_count->whereIn('product.product_id', $array);
+                            }
+                        }
+                    } else {
+                        if (!is_null($feature_selection_id) && count($feature_selection_id) > 0) {
+                            if (in_array($r_incitem->feature_selection_id, $feature_selection_id)) {
+                               
+                            } else {
+                                if(!empty($request->input('feature_id'))) {
+                                    $product_count->whereIn('product.product_id', $array);
+                                }
+                            }
+                        } else {
+                            if(!empty($request->input('feature_id'))) {
+                                $product_count->whereIn('product.product_id', $array);
+                            }
+                        }
+                    }
+                    
+                    
+
+                    if ($feature_id<1 or $feature_id == 0) {
+                        $product_count = $product_count->count();
+                    } else {
+                        
+                        if (in_array($r_incitem->id, $request->feature_id)) {
+                            if (!is_null($feature_selection_id) && count($feature_selection_id) > 0) {
+                                if (in_array($r_incitem->feature_selection_id, $feature_selection_id)) {
+                                    $product_count->whereIn('product.product_id', $pro_sun);
+                                    $product_count = $product_count->count();
+                                } else {
+                                    $product_count->whereIn('product.product_id', $pro_sun);
+                                    $product_count = $product_count->count();
+                                }
+                            } else {
+                                $product_count->whereIn('product.product_id', $pro_sun);
+                                $product_count = $product_count->count();
+                            }
+                            
+                        } else {
+                            $product_count = $product_count->count();
+                        }
+                    }
+                    
+                 
+                    $r_incitem->count = $product_count;
+
+                }
+
+            
+            $category3 =[];
+             $category_txt_inc = DB::table('category1')
+                                ->join('category2', 'category1.category1_id', '=', 'category2.category1_id')
+                                ->join('category3', 'category2.category2_id', '=', 'category3.category2_id')
+                                ->where('category2.category2_id', '=', $request->category2_id)
+                                ->first();
+                            
+                if (!empty($category_txt_inc)) {
+                    $category3 = DB::table('category3')
+                                    ->where('category2_id', '=', $category_txt_inc->category2_id)
+                                    ->get();
+                            
+                        
+                            foreach ($category3 as $cat3) {
+                                $count3 = DB::table('product');
+                                    $count3->where('product.category3_id', $cat3->category3_id);
+                                if(!empty($request->input('brand_id'))) {
+                                    $count3->where('product.brand_id', $request->brand_id);
+                                }
+                                // if(!empty($request->input('color_id'))) {
+                                //     $count3->where('product.color_id', $request->color_id);
+                                // }
+                                if(!empty($request->input('feature_id'))) {
+                                    $count3->whereIn('product.product_id', $array);
+                                }
+
+                                if ($category3_id>1 or $category3_id == 0) {
+                                    $count3 = $count3->count();
+                                } else {
+                                    if (in_array($cat3->category3_id, $request->category3_id)) {
+                                        $count3 = count($pro_sun);
+                                    } else {
+                                        $count3 = $count3->count();
+                                    }
+                                }
+                                $cat3->count = $count3;
+                            }
+                }
+
+        return response()->json([
+            'brand' => $brand_inc2,
+            // 'color' => $color,
+            'feature'=> $feature_inc_item,
+            'category3'=> $category3,
+        ]);
+    }
       
 }
 ?>

@@ -32,7 +32,7 @@
                                         <p>
                                             {{ $r->news_promotion_description }}
                                         </p>
-                                        <a href="#"><i class="bi bi-arrow-up-right"></i></a>
+                                        <a href="{{ url('news_detail/'.$r->news_promotion_id) }}"><i class="bi bi-arrow-up-right"></i></a>
                                     </figcaption>
                                 </div>
                             </div>

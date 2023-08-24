@@ -34,7 +34,7 @@ function date2dateBasicThai($date) {
 
     return $day.' '.$month_.' '.$year;
 }
- 
+
 function checkPrice($before_price, $price) {
     if($before_price != $price) {
         return '<span class="price">฿ '.number_format($before_price, 2).'</span>';

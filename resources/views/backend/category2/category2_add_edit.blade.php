@@ -18,6 +18,15 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-md-3 control-label">Image2</label>
+            <div class="col-md-9">
+                <input type="file" name="category2_image2" id="category2_image2" class="form-control"> 
+@if(!empty($row) and $row->category2_image2 != '') 
+                    <br><img src="{{asset('public/uploads/category2/'.$row->category2_image2)}}" width="150">
+@endif
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-md-3 control-label">Category 1</label>
             <div class="col-md-9">
                 <select name="category1_id" id="category1_id" class="form-control" required>

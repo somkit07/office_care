@@ -138,175 +138,281 @@
                                                                     class="fi fi-rr-cross-small"></i></span></a></li>
                                                 </div> --}}
                                                 <section id="category_menu_sec">
+                                                    <h2>ตัวกรองที่เลือก 
+                                                        <button class="btn text-right refresh" type="button">Clear all</button>
+                                                    </h2>
+                                                    <div class="filterselect">
+                                                        {{-- <li><a href="#">กระดาษโน๊ต <span><i class="fi fi-rr-cross-small"></i></span></a></li>
+                                                        <li><a href="#">฿0-฿500 <span><i class="fi fi-rr-cross-small"></i></span></a></li> --}}
+                                                    </div>
+                                            
                                                     <div class="accordion" id="accordionPanelsStayOpenExample">
+                                                       
                                                         <div class="accordion-item">
-                                                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                                                <button class="accordion-button" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#panelsStayOpen-collapseOne"
-                                                                    aria-expanded="true"
-                                                                    aria-controls="panelsStayOpen-collapseOne">
-                                                                    ผลิตภัณฑ์กระดาษ
-                                                                </button>
-                                                            </h2>
-                                                            <div id="panelsStayOpen-collapseOne"
-                                                                class="accordion-collapse collapse show"
-                                                                aria-labelledby="panelsStayOpen-headingOne">
-                                                                <div class="accordion-body">
-                                                                    <ul class="menu">
-                                                                        <li><label class="check-container">กระดาษการ์ด
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label
-                                                                                class="check-container">กระดาษความร้อน
-                                                                                สลิปกระดาษ <span
-                                                                                    class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label class="check-container">กระดาษคาร์บอน
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label
-                                                                                class="check-container">กระดาษต่อเนื่อง
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label
-                                                                                class="check-container">กระดาษถ่ายเอกสาร
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label
-                                                                                class="check-container">กระดาษต่อเนื่อง
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label class="check-container">กระดาษโน้ต
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-
-                                                                        <li><label
-                                                                                class="check-container">กระดาษอิงค์เจ็ท
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-
-                                                                        <li><label
-                                                                                class="check-container">กระดาษเลเซอร์
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label
-                                                                                class="check-container">แผ่นพลาสติกใส
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-                                                                        <li><label class="check-container">อินเด็กซ์
-                                                                                <span class="count">(35)</span>
-                                                                                <input type="checkbox">
-                                                                                <span class="checkmark"></span>
-                                                                            </label></li>
-
-
-
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="accordion-item">
-
-                                                            <h2 class="accordion-header"
-                                                                id="panelsStayOpen-headingTwo">
-                                                                <button class="accordion-button collapsed"
-                                                                    type="button" data-bs-toggle="collapse"
-                                                                    data-bs-target="#panelsStayOpen-collapseTwo"
-                                                                    aria-expanded="false"
+                                                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                                    data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
                                                                     aria-controls="panelsStayOpen-collapseTwo">
                                                                     ราคา
                                                                 </button>
                                                             </h2>
-                                                            <div id="panelsStayOpen-collapseTwo"
-                                                                class="accordion-collapse collapse"
+                                                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
                                                                 aria-labelledby="panelsStayOpen-headingTwo">
                                                                 <div class="accordion-body">
-                                                                    <div class="price-range-slider">
-
-                                                                        <div id="slider-range" class="range-bar">
+                                                                    <div class="filters">
+                                                                        <div class="controls">
+                                                                            <div class="price-range"></div>
+                                                                            <div class="textinputs">
+                                                                                <input class="price-min" type="text" value="0" />
+                                                                                <input class="price-max" type="text"
+                                                                                    value="@if (!empty($max_price_inc) and $max_price_inc->category3_max_price != 0) {{ $max_price_inc->category3_max_price }}@else{{ '10000' }} @endif" />
+                                                                            </div>
                                                                         </div>
-                                                                        <p class="range-value">
-                                                                            <input type="text" id="amount"
-                                                                                readonly>
-                                                                        </p>
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="accordion-item">
-                                                            <h2 class="accordion-header"
-                                                                id="panelsStayOpen-headingThree">
-                                                                <button class="accordion-button collapsed"
-                                                                    type="button" data-bs-toggle="collapse"
-                                                                    data-bs-target="#panelsStayOpen-collapseThree"
-                                                                    aria-expanded="false"
+                                                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                                    data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
                                                                     aria-controls="panelsStayOpen-collapseThree">
                                                                     แบรนด์
                                                                 </button>
                                                             </h2>
-                                                            <div id="panelsStayOpen-collapseThree"
-                                                                class="accordion-collapse collapse"
+                                                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
                                                                 aria-labelledby="panelsStayOpen-headingThree">
                                                                 <div class="accordion-body">
+                                                                    {{-- <div class="filterselectbrand"></div> --}}
                                                                     <ul class="menu">
-                                                                        @if (!empty($brand))
-                                                                            @foreach ($brand as $r)
+                                                                        @php
+                                                                            $brand_inc = DB::table('brand') 
+                                                                                ->orderBy('brand_id', 'asc')
+                                                                                ->skip(0)
+                                                                                ->take(4)
+                                                                                ->get();
+                                                                            
+                                                                            $brand_inc2 = DB::table('brand')
+                                                                                ->orderBy('brand_id', 'asc')
+                                                                                ->skip(4)
+                                                                                ->take(100)
+                                                                                ->get();
+                                                                        @endphp
+                                            
+                                                                        @if (!empty($brand_inc))
+                                                                            @foreach ($brand_inc as $r_inc)
                                                                                 @php
                                                                                     $product = DB::table('product')
-                                                                                        ->where('brand_id', '=', $r->brand_id)
+                                                                                        ->where('product.brand_id', '=', $r_inc->brand_id)
+                                                                                        ->where('product.category3_id', '=', $category3_id)
                                                                                         ->get();
+                                                                                    
+                                                                                    $count = count($product);
                                                                                 @endphp
-                                                                                <li><label
-                                                                                        class="check-container">{{ $r->brand_name }}
-                                                                                        <span
-                                                                                            class="count">({{ count($product) }})</span>
-                                                                                        <input type="checkbox">ss
-                                                                                        <span class="checkmark"></span>
-                                                                                    </label></li>
+                                            
+                                                                                @if ($count > 0)
+                                                                                    <li id="brand_dispay_index{{ $r_inc->brand_id }}"><label class="check-container">{{ $r_inc->brand_name }} <span
+                                                                                                class="count" id="show-count-brand_index{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                                                                            <input type="checkbox" class="brand_id" value="{{ $r_inc->brand_id }}"
+                                                                                                id="brand_id{{ $r_inc->brand_id }}">
+                                                                                            <span class="checkmark"></span>
+                                                                                        </label>
+                                                                                    </li>
+                                                                                @endif
                                                                             @endforeach
                                                                         @endif
-                                                                        {{-- <li><label class="check-container">Brother <span
-                                                                                    class="count">(35)</span>
+                                                                        {{-- <li><label class="check-container">Brother <span class="count">(35)</span>
                                                                                 <input type="checkbox">
                                                                                 <span class="checkmark"></span>
                                                                             </label></li>
-                                                                        <li><label class="check-container">Sharp <span
-                                                                                    class="count">(35)</span>
+                                                                        <li><label class="check-container">Sharp <span class="count">(35)</span>
                                                                                 <input type="checkbox">
                                                                                 <span class="checkmark"></span>
                                                                             </label></li>
-                                                                        <li><label class="check-container">EPSON <span
-                                                                                    class="count">(35)</span>
+                                                                        <li><label class="check-container">EPSON <span class="count">(35)</span>
                                                                                 <input type="checkbox">
                                                                                 <span class="checkmark"></span>
                                                                             </label></li> --}}
+                                                                            @if (count($brand_inc2)<4)
+                                                                                 <div id="morebrands" class="collapse">
+                                                                            @endif
+                                                                       
+                                                                            @if (!empty($brand_inc2))
+                                                                                @foreach ($brand_inc2 as $r_inc)
+                                                                                    @php
+                                                                                        $product = DB::table('product')
+                                                                                            ->where('product.brand_id', '=', $r_inc->brand_id)
+                                                                                            ->where('product.category3_id', '=', $category3_id)
+                                                                                            ->get();
+                                                                                        
+                                                                                        $count = count($product);
+                                                                                    @endphp
+                                            
+                                                                                    @if ($count > 0)
+                                                                                        <li id="brand_dispay_index{{ $r_inc->brand_id }}"><label class="check-container">{{ $r_inc->brand_name }} <span
+                                                                                                    class="count" id="show-count-brand_index{{ $r_inc->brand_id }}">({{ $count }})</span>
+                                                                                                <input type="checkbox" class="brand_id"
+                                                                                                    id="brand_id{{ $r_inc->brand_id }}"
+                                                                                                    value="{{ $r_inc->brand_id }}">
+                                                                                                <span class="checkmark"></span>
+                                                                                            </label></li>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif
+                                                                            {{-- <li><label class="check-container">Brother <span class="count">(35)</span>
+                                                                                    <input type="checkbox">
+                                                                                    <span class="checkmark"></span>
+                                                                                </label></li>
+                                                                            <li><label class="check-container">Sharp <span class="count">(35)</span>
+                                                                                    <input type="checkbox">
+                                                                                    <span class="checkmark"></span>
+                                                                                </label></li>
+                                                                            <li><label class="check-container">EPSON <span class="count">(35)</span>
+                                                                                    <input type="checkbox">
+                                                                                    <span class="checkmark"></span>
+                                                                                </label></li> --}}
+                                                                         @if (count($brand_inc2)<4)
+                                                                           </div>    
+                                                                           <a data-bs-toggle="collapse" data-bs-target="#morebrands" class="morelist">+ ดูเพิ่มเติม</a>
+                                             
+                                                                        @endif
+                                            
+                                                                       
                                                                     </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="accordion-item">
+                                                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                                    data-bs-target="#panelsStayOpen-collapseThree1" aria-expanded="false"
+                                                                    aria-controls="panelsStayOpen-collapseThree1">
+                                                                    สี
+                                                                </button>
+                                                            </h2>
+                                                            <div id="panelsStayOpen-collapseThree1" class="accordion-collapse collapse"
+                                                                aria-labelledby="panelsStayOpen-headingThree">
+                                                                <div class="accordion-body">
+                                                                    <ul class="menucolor">
+                                                                        @php
+                                                                            $color_inc = DB::table('color')
+                                                                                ->orderBy('color_id', 'asc')
+                                                                                ->get();
+                                                                        @endphp
+                                            
+                                                                        @if (!empty($color_inc))
+                                                                            @foreach ($color_inc as $r_inc)
+                                                                                @php
+                                                                                    $product = DB::table('product')
+                                                                                        ->where('product.color_id', '=', $r_inc->color_id)
+                                                                                        ->where('product.category3_id', '=', $category3_id)
+                                                                                        ->get();
+                                                                                    
+                                                                                    $count = count($product);
+                                                                                @endphp
+                                            
+                                                                                @if ($count > 0)
+                                                                                    <li id="color_dispay_index{{ $r_inc->color_id }}" style="display: block;">
+                                                                                        <a href="#" onclick="filterProductSub('{{ $r_inc->color_id }}');"><span
+                                                                                                class="cl01 circlesty"
+                                                                                                style="background-color: {{ $r_inc->color_code }}"></span>
+                                                                                            {{ $r_inc->color_name }} <span
+                                                                                                class="count" id="show-count-color_index{{ $r_inc->color_id }}">({{ $count }})</span></a>
+                                                                                    </li>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
+                                                                        {{-- <li>
+                                                                            <a href="#"><span class="cl02 circlesty"></span> ขาว<span class="count">(35)</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="#"><span class="cl03 circlesty"></span> ดำ <span class="count">(35)</span></a>
+                                                                        </li> --}}
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                            
+                                                        <!-- Feature -->
+                                                        @if (!empty($feature_inc))
+                                                       
+                                                            @php 
+                                                                $i = 0;
+                                                            @endphp
+                                                            @foreach ($feature_inc as $r_inc)
+                                                                @php
+                                                                    $i++;
+                                                                @endphp
+                                                                <div class="accordion-item">
+                                                                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                                            data-bs-target="#panelsStayOpen-collapse{{ $i }}" aria-expanded="false"
+                                                                            aria-controls="panelsStayOpen-collapse{{ $i }}">
+                                                                            {{ $r_inc->name }}
+                                                                        </button>
+                                                                    </h2>
+                                                                    <div id="panelsStayOpen-collapse{{ $i }}" class="accordion-collapse collapse"
+                                                                        aria-labelledby="panelsStayOpen-heading{{ $i }}">
+                                                                        <div class="accordion-body">
+                                                                            <ul class="menu">
+                                                                                @php
+                                                                                    $feature_inc_item = DB::table('feature_selections')
+                                                                                        ->join('features', 'feature_selections.id', 'features.feature_selection_id')
+                                                                                        ->join('product_to_feature', 'product_to_feature.feature_id', 'features.id')
+                                                                                        ->join('product', 'product.product_id', '=', 'product_to_feature.product_id')
+                                                                                        ->where('features.feature_selection_id', '=', $r_inc->id)
+                                                                                        ->where('feature_selections.category3_id', '=', $category3_id)
+                                                                                        ->where('features.is_active', '=', 1)
+                                                                                        ->select(
+                                                                                            'features.id as id',
+                                                                                            'features.name as name',
+                                                                                            'feature_selections.id as feature_selections_id',
+                                                                                            'product_to_feature.id as product_to_feature_id',
+                                                                                            'product_to_feature.product_id as product_to_feature_product_id',
+                                                                                            'product.product_id as product_id',
+                                                                                            //DB::raw('COUNT(product.product_id) as product_count')
+                                                                                        )
+                                                                                        ->groupBy('features.id')
+                                                                                        ->get();
+                                                                                    
+                                                                                    $i_inc = 1;
+                                                                                    // dd($feature_inc_item);
+                                                                                @endphp
+                                                                                @if (!empty($feature_inc_item))
+                                                                                    @foreach ($feature_inc_item as $r_incitem)
+                                                                                        @php
+                                                                                            $product_count = DB::table('product')
+                                                                                                ->select('product_to_feature.id')
+                                                                                                ->join('product_to_feature', 'product.product_id', '=', 'product_to_feature.product_id')
+                                                                                                ->where('product_to_feature.feature_id', '=', $r_incitem->id)
+                                                                                                ->get();
+                                                                                        @endphp
+                                                                                        @if (count($product_count) > 0)
+                                                                                            {{-- @if ($count > 0) --}}
+                                                                                            <li id="feature_dispay_index{{ $r_incitem->id }}" style="display: block;"><label class="check-container">{{ $r_incitem->name }} <span
+                                                                                                        class="count" id="show-count-feature_index{{ $r_incitem->id }}">({{ count($product_count) }})</span>
+                                                                                                    <input type="checkbox" class="feature_id"
+                                                                                                        id="feature_id{{ $r_incitem->id }}"
+                                                                                                        value="{{ $r_incitem->id }}">
+                                                                                                    <span class="checkmark"></span>
+                                                                                                </label></li>
+                                                                                            {{-- @endif --}}
+                                                                                        @endif
+                                                                                        @php
+                                                                                            $i_inc++;
+                                                                                        @endphp
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                        <!-- End Feature -->
+                                            
                                                     </div>
+                                            
                                                 </section>
 
                                             </div>
